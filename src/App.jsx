@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -12,7 +12,6 @@ import Login from './pages/Login';
 import Careers from './pages/Careers';
 import Impact from './pages/Impact';
 import ScrollToTop from './components/ScrollToTop';
-
 import Cursor from './components/Cursor';
 
 const ProtectedRoute = ({ children }) => {
