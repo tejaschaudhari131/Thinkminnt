@@ -82,14 +82,18 @@ After deploying both:
 
 ## 🌐 Custom Domain Setup (thinkminnt.com)
 
-### Frontend (Vercel)
-1. Go to your Vercel Project Settings → **Domains**
-2. Add `thinkminnt.com`
-3. Vercel will provide **DNS Records** (A Record and CNAME)
+### Frontend (GitHub Pages)
+1. Go to your GitHub Repository → **Settings** → **Pages**
+2. Under **Custom domain**, enter `thinkminnt.com` and save.
+3. GitHub will check for DNS records.
 4. Go to your Domain Registrar (GoDaddy, Namecheap, etc.)
 5. Add the provided records:
-   - **A Record**: `@` points to `76.76.21.21`
-   - **CNAME**: `www` points to `cname.vercel-dns.com`
+   - **A Records** (Add all 4):
+     - `185.199.108.153`
+     - `185.199.109.153`
+     - `185.199.110.153`
+     - `185.199.111.153`
+   - **CNAME**: `www` points to `tejaschaudhari131.github.io`
 
 ### Backend (Render)
 1. Go to your Render Web Service → **Settings** → **Custom Domains**
