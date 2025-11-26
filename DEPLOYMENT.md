@@ -80,6 +80,29 @@ After deploying both:
 4. Select your repository
 5. Railway will auto-detect and deploy both
 
+## 🌐 Custom Domain Setup (thinkminnt.com)
+
+### Frontend (Vercel)
+1. Go to your Vercel Project Settings → **Domains**
+2. Add `thinkminnt.com`
+3. Vercel will provide **DNS Records** (A Record and CNAME)
+4. Go to your Domain Registrar (GoDaddy, Namecheap, etc.)
+5. Add the provided records:
+   - **A Record**: `@` points to `76.76.21.21`
+   - **CNAME**: `www` points to `cname.vercel-dns.com`
+
+### Backend (Render)
+1. Go to your Render Web Service → **Settings** → **Custom Domains**
+2. Add `api.thinkminnt.com` (Recommended)
+3. Render will provide a CNAME record
+4. Add it to your Domain Registrar:
+   - **CNAME**: `api` points to `your-service.onrender.com`
+
+### Update Configuration
+Once domains are active:
+1. Update `VITE_API_URL` in Vercel to `https://api.thinkminnt.com`
+2. Redeploy Frontend
+
 ## 🔒 Production Checklist
 
 - [ ] Update CORS origins
