@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, MessageSquare } from 'lucide-react';
+import { MapPin, Mail, Phone, Send } from 'lucide-react';
 import Button from '../components/Button';
 import PageTransition from '../components/PageTransition';
+import SEO from '../components/SEO';
+import API_URL from '../config/api';
 
 const Contact = () => {
+    const contactSchema = {
+        "@context": "https://schema.org",
+        "@type": "NGO",
+        "name": "ThinkMinnt Foundation",
+        "url": "https://thinkminnt.com",
+        "logo": "https://thinkminnt.com/logo.jpg",
+        "contactPoint": [
+            {
+                "@type": "ContactPoint",
+                "telephone": "+91-91393-92550",
+                "contactType": "customer service",
+                "areaServed": "IN",
+                "availableLanguage": ["en", "hi", "mr"]
+            },
+            {
+                "@type": "ContactPoint",
+                "telephone": "+91-93721-95870",
+                "contactType": "customer service",
+                "areaServed": "IN",
+                "availableLanguage": ["en", "hi", "mr"]
+            }
+        ],
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "S No. 89/1, 89/2, Shop No. Namo Developers, Mohamadwadi",
+            "addressLocality": "Pune",
+            "addressRegion": "Maharashtra",
+            "postalCode": "411060",
+            "addressCountry": "IN"
+        }
+    };
+
     return (
         <PageTransition>
+            <SEO
+                title="Contact Us"
+                description="Get in touch with ThinkMinnt Foundation. We'd love to hear from you about volunteering, donations, or partnerships."
+                keywords="Contact, Address, Email, Phone, Volunteer, Donate"
+                schema={contactSchema}
+            />
             <div className="flex flex-col">
                 {/* Header */}
                 <section className="bg-primary-dark text-white py-24 relative overflow-hidden">
@@ -18,7 +58,9 @@ const Contact = () => {
                             transition={{ duration: 0.6 }}
                             className="text-5xl md:text-7xl font-bold font-heading mb-6"
                         >
-                            Contact <span className="text-accent">Us</span>
+                            <span className="bg-gradient-to-r from-white via-secondary to-accent bg-clip-text text-transparent">
+                                Contact Us
+                            </span>
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0 }}
@@ -68,7 +110,6 @@ const Contact = () => {
                                             </div>
                                             <div>
                                                 <h3 className="font-bold text-white text-xl mb-2">Email Us</h3>
-                                                <p className="text-gray-400">info@thinkminnt.com</p>
                                                 <p className="text-gray-400">tejaschaudhari131@gmail.com</p>
                                                 <p className="text-gray-400">adityajoshi020503@gmail.com</p>
                                             </div>
@@ -93,16 +134,9 @@ const Contact = () => {
                                 initial={{ opacity: 0, x: 30 }}
                                 whileInView={{ opacity: 1, x: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: 0.2 }}
-                                className="bg-white p-10 md:p-14 rounded-[2.5rem] border border-neutral-100 shadow-xl"
+                                transition={{ duration: 0.6 }}
+                                className="bg-white rounded-[2.5rem] p-10 md:p-14 shadow-xl border border-gray-100"
                             >
-                                <div className="flex items-center gap-3 mb-8">
-                                    <div className="p-3 bg-primary/10 rounded-xl text-primary">
-                                        <MessageSquare size={24} />
-                                    </div>
-                                    <h2 className="text-3xl font-bold text-gray-900 font-heading">Send a Message</h2>
-                                </div>
-
                                 <form className="space-y-6" onSubmit={async (e) => {
                                     e.preventDefault();
                                     const formData = {
@@ -113,7 +147,7 @@ const Contact = () => {
                                         message: e.target.message.value
                                     };
                                     try {
-                                        const response = await fetch('http://localhost:3001/api/contact', {
+                                        const response = await fetch(`${API_URL}/api/contact`, {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify(formData)

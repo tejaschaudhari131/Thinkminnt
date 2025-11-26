@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Briefcase, MapPin, Clock, ArrowRight, X, Upload, CheckCircle } from 'lucide-react';
 import Button from '../components/Button';
-
 import PageTransition from '../components/PageTransition';
+import SEO from '../components/SEO';
+import API_URL from '../config/api';
 
 const Careers = () => {
     const [jobs, setJobs] = useState([]);
@@ -13,7 +14,7 @@ const Careers = () => {
     const [applicationStatus, setApplicationStatus] = useState('idle'); // idle, submitting, success, error
 
     useEffect(() => {
-        fetch('http://localhost:3001/api/careers')
+        fetch(`${API_URL}/api/careers`)
             .then(res => {
                 if (!res.ok) throw new Error('Failed to fetch careers');
                 return res.json();
@@ -37,7 +38,7 @@ const Careers = () => {
         formData.append('jobId', selectedJob.id);
 
         try {
-            const response = await fetch('http://localhost:3001/api/apply', {
+            const response = await fetch(`${API_URL}/api/apply`, {
                 method: 'POST',
                 body: formData
             });
@@ -59,6 +60,11 @@ const Careers = () => {
 
     return (
         <PageTransition>
+            <SEO
+                title="Join Our Team - Careers"
+                description="Be a part of the change. Explore career opportunities at ThinkMinnt Foundation and help us build a better future."
+                keywords="Careers, Jobs, NGO Jobs, Social Impact Careers, Volunteer, Pune"
+            />
             <div className="flex flex-col">
                 {/* Hero Section */}
                 <section className="bg-primary-dark text-white py-24 relative overflow-hidden">
@@ -72,7 +78,9 @@ const Careers = () => {
                             transition={{ duration: 0.6 }}
                         >
                             <h1 className="text-5xl md:text-7xl font-bold font-heading mb-6">
-                                Join Our <span className="text-secondary">Team</span>
+                                <span className="bg-gradient-to-r from-white via-secondary to-accent bg-clip-text text-transparent">
+                                    Join Our Team
+                                </span>
                             </h1>
                             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
                                 Be a part of the change. We are looking for passionate individuals to help us build a better future.
@@ -234,20 +242,9 @@ const Careers = () => {
                                                 <textarea name="coverLetter" rows="4" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"></textarea>
                                             </div>
 
-                                            {applicationStatus === 'error' && (
-                                                <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
-                                                    Something went wrong. Please try again.
-                                                </div>
-                                            )}
-
-                                            <div className="flex justify-end gap-4 pt-4 border-t border-gray-100">
-                                                <Button type="button" variant="ghost" onClick={() => setSelectedJob(null)}>
-                                                    Cancel
-                                                </Button>
-                                                <Button type="submit" variant="primary" disabled={applicationStatus === 'submitting'}>
-                                                    {applicationStatus === 'submitting' ? 'Submitting...' : 'Submit Application'}
-                                                </Button>
-                                            </div>
+                                            <Button type="submit" disabled={applicationStatus === 'submitting'} className="w-full">
+                                                {applicationStatus === 'submitting' ? 'Submitting...' : 'Submit Application'}
+                                            </Button>
                                         </form>
                                     )}
                                 </div>

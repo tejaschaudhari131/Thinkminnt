@@ -5,6 +5,12 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import About from './pages/About';
 import Programs from './pages/Programs';
+import ProgramDetails from './pages/ProgramDetails';
+import Events from './pages/Events';
+import Gallery from './pages/Gallery';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import Team from './pages/Team';
 import Contact from './pages/Contact';
 import Donate from './pages/Donate';
 import Admin from './pages/Admin';
@@ -31,6 +37,12 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/programs" element={<Programs />} />
+        <Route path="/programs/:id" element={<ProgramDetails />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogPost />} />
+        <Route path="/team" element={<Team />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/careers" element={<Careers />} />
         <Route path="/impact" element={<Impact />} />

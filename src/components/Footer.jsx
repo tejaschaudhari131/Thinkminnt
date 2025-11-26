@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, ArrowRight, Heart } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, ArrowRight, Heart, Brain } from 'lucide-react';
 import Newsletter from './Newsletter';
-import logo from '../assets/logo.jpg';
+// Removed logo import
 
 const Footer = () => {
     return (
         <footer className="bg-neutral-900 text-white pt-20 pb-10 relative overflow-hidden">
-            {/* Background Pattern */}
+            {/* ... (Background Pattern) */}
             <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
                 <div className="absolute -top-24 -right-24 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
                 <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
@@ -20,10 +20,7 @@ const Footer = () => {
                     {/* Brand & Mission */}
                     <div className="space-y-6">
                         <Link to="/" className="flex items-center gap-2 group">
-                            <img src={logo} alt="ThinkMint Foundation" className="h-12 w-auto rounded-lg shadow-md group-hover:shadow-primary/30 transition-all duration-300" />
-                            <span className="text-2xl font-bold font-heading text-white">
-                                Think<span className="text-secondary">Minnt</span>
-                            </span>
+                            <img src="/logo.jpg" alt="ThinkMinnt Logo" className="h-16 w-auto object-contain bg-white/10 rounded-lg p-1" />
                         </Link>
                         <p className="text-gray-400 text-sm leading-relaxed">
                             A Section 8 Non-Profit Organization dedicated to Education, Innovation, and Child Development.
@@ -76,7 +73,7 @@ const Footer = () => {
                                 <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 text-secondary group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
                                     <Mail size={14} />
                                 </div>
-                                <span className="text-sm">info@thinkminnt.com</span>
+                                <span className="text-sm">tejaschaudhari131@gmail.com</span>
                             </li>
                         </ul>
                     </div>

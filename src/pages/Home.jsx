@@ -38,12 +38,42 @@ const StatCounter = ({ number, label }) => {
     );
 };
 
+import SEO from '../components/SEO';
+
 const Home = () => {
     const { scrollY } = useScroll();
     const y = useTransform(scrollY, [0, 500], [0, 200]);
 
+    const organizationSchema = {
+        "@context": "https://schema.org",
+        "@type": "NGO",
+        "name": "ThinkMinnt Foundation",
+        "url": "https://thinkminnt.com",
+        "logo": "https://thinkminnt.com/logo.jpg",
+        "sameAs": [
+            "https://www.facebook.com/thinkmint",
+            "https://www.twitter.com/thinkmint",
+            "https://www.linkedin.com/company/thinkmint"
+        ],
+        "description": "ThinkMinnt Foundation is empowering communities through education, innovation, and sustainable development.",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "S No. 89/1, 89/2, Shop No. Namo Developers, Mohamadwadi",
+            "addressLocality": "Pune",
+            "addressRegion": "Maharashtra",
+            "postalCode": "411060",
+            "addressCountry": "IN"
+        }
+    };
+
     return (
         <PageTransition>
+            <SEO
+                title="Home"
+                description="ThinkMinnt Foundation is empowering communities through education, innovation, and sustainable development."
+                keywords="ThinkMinnt, Foundation, Education, Innovation, Non-Profit, India, Social Impact"
+                schema={organizationSchema}
+            />
             <div className="flex flex-col overflow-hidden">
                 {/* Hero Section */}
                 <section className="relative min-h-screen flex items-center justify-center bg-primary-dark text-white pt-20 overflow-hidden">

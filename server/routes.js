@@ -273,4 +273,121 @@ router.post('/newsletter', (req, res) => {
     }
 });
 
+router.post('/seed', (req, res) => {
+    const { secret } = req.body;
+    if (secret !== 'ThinkMinntSecretKey2024') {
+        return res.status(403).json({ success: false, message: 'Unauthorized' });
+    }
+
+    try {
+        const insertCareer = db.prepare('INSERT INTO careers (title, department, location, type, description, requirements) VALUES (@title, @department, @location, @type, @description, @requirements)');
+        const checkCareer = db.prepare('SELECT id FROM careers WHERE title = ?');
+
+        const careers = [
+            {
+                title: "Program Coordinator",
+                department: "Operations",
+                location: "Pune, India",
+                type: "Full-time",
+                description: "We are looking for a passionate Program Coordinator to oversee our educational initiatives. You will be responsible for planning, executing, and monitoring our 'Tech for All' and 'Literacy First' programs.",
+                requirements: "Bachelor's degree in Social Work or related field, 2+ years of experience in NGO operations, strong communication skills."
+            },
+            {
+                title: "Volunteer Manager",
+                department: "Human Resources",
+                location: "Remote / Pune",
+                type: "Part-time",
+                description: "Join us to manage our growing community of volunteers. You will recruit, train, and coordinate volunteers for various events and ongoing projects.",
+                requirements: "Experience in community management, excellent organizational skills, proficiency with digital tools."
+            },
+            {
+                title: "Grant Writer",
+                department: "Fundraising",
+                location: "Remote",
+                type: "Contract",
+                description: "Help us secure funding for our impactful projects. We need a skilled writer to research opportunities and draft compelling grant proposals.",
+                requirements: "Proven track record of successful grant applications, exceptional writing abilities, familiarity with non-profit funding landscape."
+            },
+            {
+                title: "Community Volunteer",
+                department: "Community",
+                location: "Remote / On-site",
+                type: "Volunteer",
+                description: "Join our community of changemakers! Assist with various initiatives, from event organization to community outreach. A great way to give back and meet like-minded people.",
+                requirements: "Passion for social impact, willingness to learn, and a positive attitude. No prior experience required."
+            },
+            {
+                title: "Social Media Intern",
+                department: "Marketing",
+                location: "Remote",
+                type: "Internship",
+                description: "Help us tell our story to the world. You will assist in creating content for our social media channels, engaging with our audience, and tracking analytics.",
+                requirements: "Current student or recent graduate in Marketing/Communications. Familiarity with Canva, Instagram, and LinkedIn."
+            },
+            {
+                title: "Teaching Assistant Volunteer",
+                department: "Education",
+                location: "Pune, India",
+                type: "Volunteer",
+                description: "Support our 'Tech for All' program by assisting instructors during computer literacy workshops. Help students with hands-on practice and answer their questions.",
+                requirements: "Basic computer knowledge, patience, and a desire to teach. Fluency in Marathi or Hindi is a plus."
+            },
+            {
+                title: "Research Intern",
+                department: "Impact Assessment",
+                location: "Remote",
+                type: "Internship",
+                description: "Assist our team in measuring the impact of our programs. You will help with data collection, analysis, and report writing.",
+                requirements: "Strong analytical skills, attention to detail, and proficiency in Excel/Google Sheets."
+            },
+            {
+                title: "Event Coordinator Volunteer",
+                department: "Events",
+                location: "Pune, India",
+                type: "Volunteer",
+                description: "Help us plan and execute fundraising events and community gatherings. You will assist with logistics, vendor coordination, and on-site management.",
+                requirements: "Strong organizational skills, ability to multitask, and ability to work well under pressure."
+            },
+            {
+                title: "Internship Program (Rolling Basis)",
+                department: "General",
+                location: "Remote / Hybrid",
+                type: "Internship",
+                description: "Flexible internship opportunities available year-round. Work on live projects, gain industry exposure, and contribute to our mission at your own pace.",
+                requirements: "Open to students and recent graduates. Minimum commitment of 3 months. flexible hours."
+            },
+            {
+                title: "Summer Internship Cohort",
+                department: "General",
+                location: "Pune / Remote",
+                type: "Internship",
+                description: "A structured 8-week intensive program running from May to July. Includes mentorship, workshops, and a capstone project. Ideal for students looking for a comprehensive learning experience.",
+                requirements: "Full-time availability during the summer break. Strong academic record and passion for social impact."
+            },
+            {
+                title: "Winter Internship Cohort",
+                department: "General",
+                location: "Pune / Remote",
+                type: "Internship",
+                description: "A 4-week fast-track program during the winter break (December - January). Focuses on specific short-term projects and campaigns.",
+                requirements: "Availability during winter break. Quick learner and team player."
+            }
+        ];
+
+        let addedCount = 0;
+        careers.forEach(career => {
+            const existing = checkCareer.get(career.title);
+            if (!existing) {
+                insertCareer.run(career);
+                addedCount++;
+            }
+        });
+
+        res.json({ success: true, message: `Seeding complete. Added ${addedCount} new careers.` });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 export default router;

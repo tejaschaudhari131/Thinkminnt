@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef } from 'react';
 import { motion, useInView, useMotionValue, useSpring } from 'framer-motion';
 import { Users, TreePine, Heart, Globe, BookOpen, Smile } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
+import ImpactMap from '../components/ImpactMap';
+import SEO from '../components/SEO';
 
 const Counter = ({ value, label, icon: Icon, suffix = "" }) => {
     const ref = useRef(null);
@@ -31,6 +33,7 @@ const Counter = ({ value, label, icon: Icon, suffix = "" }) => {
                 {displayValue.toLocaleString()}{suffix}
             </h3>
             <p className="text-gray-600 font-medium uppercase tracking-wide text-sm">{label}</p>
+
         </div>
     );
 };
@@ -47,6 +50,11 @@ const Impact = () => {
 
     return (
         <PageTransition>
+            <SEO
+                title="Our Impact"
+                description="Explore the tangible impact of ThinkMinnt Foundation's programs across education, digital literacy, and community development."
+                keywords="Social Impact, NGO Impact, Beneficiaries, Success Stories, Data"
+            />
             <div className="flex flex-col">
                 {/* Hero Section */}
                 <section className="bg-primary-dark text-white py-24 relative overflow-hidden">
@@ -60,7 +68,9 @@ const Impact = () => {
                             transition={{ duration: 0.6 }}
                         >
                             <h1 className="text-5xl md:text-7xl font-bold font-heading mb-6">
-                                Our <span className="text-secondary">Impact</span>
+                                <span className="bg-gradient-to-r from-white via-secondary to-accent bg-clip-text text-transparent">
+                                    Our Impact
+                                </span>
                             </h1>
                             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
                                 Measuring the change we create together. Every number represents a story of hope, growth, and transformation.
@@ -80,8 +90,26 @@ const Impact = () => {
                     </div>
                 </section>
 
-                {/* Quote Section */}
+                {/* Impact Map Section */}
                 <section className="py-24 bg-white">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <h2 className="text-4xl font-bold text-gray-900 mb-4">Our Reach</h2>
+                            <p className="text-xl text-gray-600 max-w-2xl mx-auto">Visualizing our footprint across the region. Each pin represents a community we serve.</p>
+                        </div>
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                        >
+                            <ImpactMap />
+                        </motion.div>
+                    </div>
+                </section>
+
+                {/* Quote Section */}
+                <section className="py-24 bg-neutral-50">
                     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9 }}

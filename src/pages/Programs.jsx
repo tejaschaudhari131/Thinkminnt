@@ -4,6 +4,7 @@ import { Code, Sprout, HeartHandshake, BookOpen, ArrowRight, Sparkles } from 'lu
 import Button from '../components/Button';
 import Card from '../components/Card';
 import PageTransition from '../components/PageTransition';
+import SEO from '../components/SEO';
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -20,6 +21,8 @@ const staggerContainer = {
     }
 };
 
+import API_URL from '../config/api';
+
 const Programs = () => {
     const [programs, setPrograms] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
@@ -27,7 +30,7 @@ const Programs = () => {
 
     React.useEffect(() => {
         console.log('Fetching programs...');
-        fetch('http://localhost:3001/api/programs')
+        fetch(`${API_URL}/api/programs`)
             .then(res => {
                 if (!res.ok) throw new Error('Network response was not ok');
                 return res.json();
@@ -56,8 +59,40 @@ const Programs = () => {
             .finally(() => setLoading(false));
     }, []);
 
+
+
+    const programSchema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": programs.map((program, index) => ({
+            "@type": "Service",
+            "position": index + 1,
+            "name": program.title,
+            "description": program.description,
+            "provider": {
+                "@type": "Organization",
+                "name": "ThinkMinnt Foundation",
+                "url": "https://thinkminnt.com"
+            },
+            "areaServed": {
+                "@type": "Place",
+                "name": "Pune, Maharashtra, India"
+            },
+            "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": program.category
+            }
+        }))
+    };
+
     return (
         <PageTransition>
+            <SEO
+                title="Our Programs"
+                description="Discover our initiatives in Digital Literacy, Rural Education, and Skill Development designed to empower communities."
+                keywords="Programs, Education, Digital Literacy, Skill Development, Rural India"
+                schema={programSchema}
+            />
             <div className="flex flex-col">
                 {/* Header */}
                 <section className="bg-primary-dark text-white py-24 relative overflow-hidden">
@@ -71,7 +106,9 @@ const Programs = () => {
                             transition={{ duration: 0.6 }}
                         >
                             <h1 className="text-5xl md:text-7xl font-bold font-heading mb-6">
-                                Our <span className="text-accent">Programs</span>
+                                <span className="bg-gradient-to-r from-white via-secondary to-accent bg-clip-text text-transparent">
+                                    Our Programs
+                                </span>
                             </h1>
                             <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed font-light">
                                 Targeted initiatives designed to create sustainable, long-term impact in the communities we serve.
@@ -111,7 +148,7 @@ const Programs = () => {
                                                 <span className="text-sm text-gray-600 flex items-center gap-2 font-medium bg-gray-50 px-4 py-2 rounded-full border border-gray-200">
                                                     <span className="text-primary">{program.icon}</span> {program.category}
                                                 </span>
-                                                <Button variant="ghost" size="sm" className="text-primary hover:bg-primary/5 font-semibold group">
+                                                <Button to={`/programs/${index}`} variant="ghost" size="sm" className="text-primary hover:bg-primary/5 font-semibold group">
                                                     Learn More <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
                                                 </Button>
                                             </div>

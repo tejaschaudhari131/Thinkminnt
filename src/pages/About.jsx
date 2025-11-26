@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { History, Target, CheckCircle, Users } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
+import SEO from '../components/SEO';
 
 const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
@@ -22,33 +22,36 @@ const staggerContainer = {
 const About = () => {
     const team = [
         {
-            name: "Mr. Tejaram Rameshkumar Choudhari",
+            name: "Tejaram Chaudhari",
             role: "Director / Founder",
             bio: "A visionary leader with over a decade of experience in social entrepreneurship. Tejaram is passionate about leveraging technology to solve grassroots educational challenges. His commitment to 'Education for All' drives the foundation's strategic direction and innovation initiatives.",
-            image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+            image: "/assets/tejaram_chaudhari.jpg"
         },
         {
-            name: "Mr. Aditya Rajkumar Joshi",
+            name: "Aditya Joshi",
             role: "Director / Founder",
             bio: "With a strong background in community development and operations, Aditya ensures that our programs reach the most vulnerable populations effectively. He oversees the on-ground implementation of our initiatives and fosters key partnerships with local stakeholders.",
-            image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+            image: "/assets/aditya_joshi.jpg"
         }
     ];
 
     const values = [
         "Transparency & Integrity",
         "Community-First Approach",
-        "Sustainable Impact",
-        "Innovation & Adaptability",
-        "Inclusivity & Diversity",
-        "Collaboration & Partnership"
+        "Innovation & Excellence"
     ];
 
     return (
         <PageTransition>
+            <SEO
+                title="About Us"
+                description="Learn about ThinkMinnt Foundation's mission, vision, and the team driving our efforts to empower communities through education and innovation."
+                keywords="About ThinkMinnt, NGO Mission, Vision, Team, Leadership, Values"
+            />
             <div className="flex flex-col">
-                {/* Header */}
-                <section className="bg-neutral-900 py-24 relative overflow-hidden">
+                {/* Hero Section */}
+                <section className="bg-primary-dark text-white py-24 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
                     <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
                     <div className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/20 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
 

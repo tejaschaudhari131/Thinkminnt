@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Heart, Sun, Moon } from 'lucide-react';
+import { Menu, X, Heart, Sun, Moon, Brain } from 'lucide-react';
 import Button from './Button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
-import logo from '../assets/logo.jpg';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +28,10 @@ const Navbar = () => {
         { name: 'Home', path: '/' },
         { name: 'About', path: '/about' },
         { name: 'Programs', path: '/programs' },
+        { name: 'Events', path: '/events' },
+        { name: 'Gallery', path: '/gallery' },
+        { name: 'Blog', path: '/blog' },
+        { name: 'Team', path: '/team' },
         { name: 'Impact', path: '/impact' },
         { name: 'Careers', path: '/careers' },
         { name: 'Contact', path: '/contact' },
@@ -45,10 +48,7 @@ const Navbar = () => {
                 <div className="flex justify-between items-center">
                     {/* Logo */}
                     <Link to="/" className="flex items-center gap-2 group">
-                        <img src={logo} alt="ThinkMint Foundation" className="h-12 w-auto rounded-lg shadow-md group-hover:shadow-primary/30 transition-all duration-300" />
-                        <span className={`text-2xl font-bold font-heading tracking-tight ${scrolled ? 'text-gray-900' : 'text-white'}`}>
-                            Think<span className="text-secondary">Minnt</span>
-                        </span>
+                        <img src="/logo.jpg" alt="ThinkMinnt Logo" className="h-12 w-auto object-contain" />
                     </Link>
 
                     {/* Desktop Navigation */}
@@ -133,7 +133,7 @@ const Navbar = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </nav>
+        </nav >
     );
 };
 

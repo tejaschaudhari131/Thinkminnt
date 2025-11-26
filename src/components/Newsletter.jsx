@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle, AlertCircle } from 'lucide-react';
+import API_URL from '../config/api';
 
 const Newsletter = () => {
     const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ const Newsletter = () => {
         setStatus('submitting');
 
         try {
-            const response = await fetch('http://localhost:3001/api/newsletter', {
+            const response = await fetch(`${API_URL}/api/newsletter`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })

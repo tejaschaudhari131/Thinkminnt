@@ -6,12 +6,16 @@ import App from './App.jsx'
 import ErrorBoundary from './components/ErrorBoundary'
 import { ThemeProvider } from './context/ThemeContext'
 
+import { HelmetProvider } from 'react-helmet-async';
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ErrorBoundary>
-      <ThemeProvider>
-        <App />
-      </ThemeProvider>
-    </ErrorBoundary>
+    <HelmetProvider>
+      <ErrorBoundary>
+        <ThemeProvider>
+          <App />
+        </ThemeProvider>
+      </ErrorBoundary>
+    </HelmetProvider>
   </StrictMode>,
 )

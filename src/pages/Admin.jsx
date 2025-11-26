@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
 import { Download } from 'lucide-react';
+import API_URL from '../config/api';
 
 const COLORS = ['#2A9D8F', '#E9C46A', '#E76F51', '#264653', '#1A365D'];
 
@@ -25,10 +26,10 @@ const Admin = () => {
             try {
                 const headers = { 'Authorization': `Bearer ${token}` };
                 const [contactsRes, donationsRes, applicationsRes, analyticsRes] = await Promise.all([
-                    fetch('http://localhost:3001/api/contacts', { headers }),
-                    fetch('http://localhost:3001/api/donations', { headers }),
-                    fetch('http://localhost:3001/api/applications', { headers }),
-                    fetch('http://localhost:3001/api/analytics', { headers })
+                    fetch(`${API_URL}/api/contacts`, { headers }),
+                    fetch(`${API_URL}/api/donations`, { headers }),
+                    fetch(`${API_URL}/api/applications`, { headers }),
+                    fetch(`${API_URL}/api/analytics`, { headers })
                 ]);
 
                 if (contactsRes.status === 401 || contactsRes.status === 403 || donationsRes.status === 401 || donationsRes.status === 403 || applicationsRes.status === 401 || applicationsRes.status === 403 || analyticsRes.status === 401 || analyticsRes.status === 403) {
@@ -63,7 +64,7 @@ const Admin = () => {
     const handleStatusChange = async (id, newStatus) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3001/api/applications/${id}/status`, {
+            const response = await fetch(`${API_URL}/api/applications/${id}/status`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -87,7 +88,7 @@ const Admin = () => {
     const handleExport = async (type) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:3001/api/export/${type}`, {
+            const response = await fetch(`${API_URL}/api/export/${type}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 
@@ -313,7 +314,7 @@ const Admin = () => {
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{app.phone}</td>
                                             <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate" title={app.coverLetter}>{app.coverLetter || '-'}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-primary">
-                                                <a href={`http://localhost:3001/uploads/${app.resume}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                                <a href={`${API_URL}/uploads/${app.resume}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
                                                     Download Resume
                                                 </a>
                                             </td>
