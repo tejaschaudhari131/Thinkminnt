@@ -1,43 +1,7 @@
 import db from './db-client.js';
 
 const initDatabase = async () => {
-  await db.exec(`
-    CREATE TABLE IF NOT EXISTS contacts (
-      id INTEGER PRIMARY KEY AUTOINCREMENT, -- SQLite syntax, PG uses SERIAL but we handle via adapter or generic SQL if possible. 
-      -- Actually, for PG we might need different CREATE syntax if we want to be strict.
-      -- But let's rely on the fact that 'INTEGER PRIMARY KEY AUTOINCREMENT' is accepted by some PG versions or we need to adjust.
-      -- Wait, PG uses SERIAL. 'INTEGER PRIMARY KEY AUTOINCREMENT' is SQLite specific.
-      -- I should use a more generic syntax or handle it.
-      -- Let's use a simple check in the SQL or just use 'SERIAL PRIMARY KEY' for PG and 'INTEGER PRIMARY KEY AUTOINCREMENT' for SQLite?
-      -- No, I can't easily switch SQL strings inside the exec call unless I split it.
-      -- I will split the CREATE statements.
-      firstName TEXT,
-      lastName TEXT,
-      email TEXT,
-      subject TEXT,
-      message TEXT,
-      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-    );
-    -- ... (other tables)
-  `);
-
-  // Actually, I need to handle the schema differences.
-  // SQLite: INTEGER PRIMARY KEY AUTOINCREMENT
-  // Postgres: SERIAL PRIMARY KEY
-
-  // I will define the schema creation based on the DB type inside initDatabase.
-  // But wait, db-client.js abstracts the DB.
-  // I should probably move the schema creation to db-client.js or have db.js check the type.
-  // db-client doesn't export the type.
-
-  // Let's just use a try-catch or specific SQL for each.
-  // Or better, let's use standard SQL that works for both?
-  // 'id SERIAL PRIMARY KEY' works in PG.
-  // SQLite supports 'INTEGER PRIMARY KEY', but 'AUTOINCREMENT' is optional.
-  // If I use 'id INTEGER PRIMARY KEY', SQLite auto-increments.
-  // PG needs SERIAL.
-
-  // Let's just do this:
+  // Determine if we are in production (Postgres) or development (SQLite)
   const isPostgres = process.env.NODE_ENV === 'production' || !!process.env.POSTGRES_URL || !!process.env.DATABASE_URL;
   const autoIncrement = isPostgres ? 'SERIAL' : 'INTEGER PRIMARY KEY AUTOINCREMENT';
   const textType = 'TEXT'; // PG supports TEXT.
