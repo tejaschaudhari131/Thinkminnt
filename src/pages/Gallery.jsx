@@ -51,14 +51,14 @@ const Gallery = () => {
             id: 1,
             name: "Riya Sharma",
             role: "Student, Tech for All",
-            quote: "Before joining the program, I had never touched a computer. Now, I'm learning to code and dream of becoming a software engineer. ThinkMinnt gave me the confidence to dream big.",
+            quote: "I just started the computer course last week, and I'm already learning so much! I'm excited to see what I can build by the end of the program.",
             image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
         },
         {
             id: 2,
             name: "Arjun Patel",
-            role: "Volunteer",
-            quote: "Volunteering with ThinkMinnt has been the most rewarding experience of my life. Seeing the smiles on the children's faces when they learn something new is priceless.",
+            role: "Founding Volunteer",
+            quote: "Being part of ThinkMinnt from day one has been incredible. The energy in our first few drives shows just how much potential we have to make a real difference.",
             image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
         }
     ];

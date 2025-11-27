@@ -5,31 +5,31 @@ import { Quote, ChevronLeft, ChevronRight, Star } from 'lucide-react';
 const testimonials = [
     {
         id: 1,
-        name: "Riya Sharma",
-        role: "Student, Tech for All",
+        name: "Dr. Anjali Deshmukh",
+        role: "Community Leader",
         image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-        content: "The coding workshop changed my life. I never thought I could build my own website, but now I dream of becoming a software engineer. Thank you ThinkMinnt!"
+        content: "We are thrilled to welcome ThinkMinnt Foundation to our community. Their focus on digital literacy is exactly what our youth need right now."
     },
     {
         id: 2,
         name: "Arjun Patel",
-        role: "Volunteer",
+        role: "Founding Volunteer",
         image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-        content: "Volunteering with the Green Roots initiative has been incredibly rewarding. Seeing the community come together to transform our local park was magical."
+        content: "The energy and vision of this team are contagious. I joined as a volunteer because I believe we are building something that will last for generations."
     },
     {
         id: 3,
         name: "Meera Reddy",
-        role: "Parent",
+        role: "Local Partner",
         image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-        content: "The Literacy First program has ignited a love for reading in my daughter. She brings home a new book every week and can't wait to share the stories with us."
+        content: "Partnering with ThinkMinnt for the upcoming 'Tech for All' drive has been a seamless experience. Their dedication to detail is impressive for a young organization."
     },
     {
         id: 4,
         name: "David Chen",
-        role: "Donor",
+        role: "Early Donor",
         image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-        content: "I support ThinkMinnt because of their transparency and tangible impact. It's inspiring to see exactly how my contributions are making a difference."
+        content: "I support ThinkMinnt because they have a clear, actionable plan. It's exciting to support a non-profit from the ground floor and watch them grow."
     }
 ];
 

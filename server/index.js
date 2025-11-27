@@ -55,6 +55,13 @@ app.use(bodyParser.json());
 app.use('/uploads', express.static(uploadDir));
 app.use('/api', routes);
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+import { initDatabase } from './db.js';
+
+app.listen(PORT, async () => {
+    try {
+        await initDatabase();
+        console.log(`Server running on http://localhost:${PORT}`);
+    } catch (error) {
+        console.error('Failed to initialize database:', error);
+    }
 });

@@ -19,6 +19,7 @@ import Careers from './pages/Careers';
 import Impact from './pages/Impact';
 import ScrollToTop from './components/ScrollToTop';
 import Cursor from './components/Cursor';
+import { ThemeProvider } from './context/ThemeContext';
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
@@ -61,13 +62,15 @@ const AnimatedRoutes = () => {
 
 function App() {
   return (
-    <Router>
-      <ScrollToTop />
-      <Cursor />
-      <Layout>
-        <AnimatedRoutes />
-      </Layout>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <ScrollToTop />
+        <Cursor />
+        <Layout>
+          <AnimatedRoutes />
+        </Layout>
+      </Router>
+    </ThemeProvider>
   );
 }
 

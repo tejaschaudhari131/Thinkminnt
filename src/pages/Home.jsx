@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowRight, Users, Globe, Lightbulb, Heart, CheckCircle, Sparkles } from 'lucide-react';
+import { ArrowRight, Heart, Users, Globe, Lightbulb, Sparkles, CheckCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
-import Card from '../components/Card';
+import StatCounter from '../components/StatCounter';
 import Reveal from '../components/Reveal';
 import PageTransition from '../components/PageTransition';
 import Testimonials from '../components/Testimonials';
@@ -21,21 +21,6 @@ const staggerContainer = {
             staggerChildren: 0.2
         }
     }
-};
-
-const StatCounter = ({ number, label }) => {
-    return (
-        <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, type: "spring" }}
-            className="text-center p-8 bg-white/5 rounded-3xl backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-colors duration-300"
-        >
-            <div className="text-5xl md:text-6xl font-bold text-accent mb-3 font-heading">{number}</div>
-            <div className="text-gray-300 font-medium tracking-wide uppercase text-sm">{label}</div>
-        </motion.div>
-    );
 };
 
 import SEO from '../components/SEO';
@@ -234,9 +219,9 @@ const Home = () => {
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-12">
                             {[
-                                { number: "50+", label: "Communities Served" },
-                                { number: "10k+", label: "Lives Impacted" },
-                                { number: "120", label: "Projects Completed" },
+                                { number: "3", label: "Communities Served" },
+                                { number: "500+", label: "Lives Impacted" },
+                                { number: "5", label: "Projects Completed" },
                                 { number: "95%", label: "Funds to Programs" }
                             ].map((stat, index) => (
                                 <StatCounter key={index} number={stat.number} label={stat.label} />

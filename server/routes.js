@@ -3,11 +3,11 @@ import db from './db.js';
 
 const router = express.Router();
 
-router.post('/contact', (req, res) => {
+router.post('/contact', async (req, res) => {
     const { firstName, lastName, email, subject, message } = req.body;
     try {
         const stmt = db.prepare('INSERT INTO contacts (firstName, lastName, email, subject, message) VALUES (?, ?, ?, ?, ?)');
-        const info = stmt.run(firstName, lastName, email, subject, message);
+        const info = await stmt.run(firstName, lastName, email, subject, message);
         res.json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
         console.error(error);
@@ -15,11 +15,11 @@ router.post('/contact', (req, res) => {
     }
 });
 
-router.post('/donate', (req, res) => {
+router.post('/donate', async (req, res) => {
     const { amount, frequency, paymentMethod } = req.body;
     try {
         const stmt = db.prepare('INSERT INTO donations (amount, frequency, paymentMethod) VALUES (?, ?, ?)');
-        const info = stmt.run(amount, frequency, paymentMethod || 'Card');
+        const info = await stmt.run(amount, frequency, paymentMethod || 'Card');
         res.json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
         console.error(error);
@@ -27,10 +27,10 @@ router.post('/donate', (req, res) => {
     }
 });
 
-router.get('/careers', (req, res) => {
+router.get('/careers', async (req, res) => {
     try {
         const stmt = db.prepare('SELECT * FROM careers');
-        const careers = stmt.all();
+        const careers = await stmt.all();
         res.json(careers);
     } catch (error) {
         console.error(error);
@@ -38,10 +38,10 @@ router.get('/careers', (req, res) => {
     }
 });
 
-router.get('/programs', (req, res) => {
+router.get('/programs', async (req, res) => {
     try {
         const stmt = db.prepare('SELECT * FROM programs');
-        const programs = stmt.all();
+        const programs = await stmt.all();
         res.json(programs);
     } catch (error) {
         console.error(error);
@@ -78,10 +78,10 @@ router.post('/login', (req, res) => {
     }
 });
 
-router.get('/contacts', authenticateToken, (req, res) => {
+router.get('/contacts', authenticateToken, async (req, res) => {
     try {
         const stmt = db.prepare('SELECT * FROM contacts ORDER BY createdAt DESC');
-        const contacts = stmt.all();
+        const contacts = await stmt.all();
         res.json(contacts);
     } catch (error) {
         console.error(error);
@@ -89,10 +89,10 @@ router.get('/contacts', authenticateToken, (req, res) => {
     }
 });
 
-router.get('/donations', authenticateToken, (req, res) => {
+router.get('/donations', authenticateToken, async (req, res) => {
     try {
         const stmt = db.prepare('SELECT * FROM donations ORDER BY createdAt DESC');
-        const donations = stmt.all();
+        const donations = await stmt.all();
         res.json(donations);
     } catch (error) {
         console.error(error);
@@ -124,7 +124,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post('/apply', upload.single('resume'), (req, res) => {
+router.post('/apply', upload.single('resume'), async (req, res) => {
     const { jobId, firstName, lastName, email, phone, coverLetter } = req.body;
     const resume = req.file ? req.file.filename : null;
 
@@ -132,7 +132,7 @@ router.post('/apply', upload.single('resume'), (req, res) => {
 
     try {
         const stmt = db.prepare('INSERT INTO applications (jobId, firstName, lastName, email, phone, resume, coverLetter) VALUES (?, ?, ?, ?, ?, ?, ?)');
-        const info = stmt.run(parseInt(jobId), firstName, lastName, email, phone, resume, coverLetter);
+        const info = await stmt.run(parseInt(jobId), firstName, lastName, email, phone, resume, coverLetter);
         res.json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
         console.error(error);
@@ -140,7 +140,7 @@ router.post('/apply', upload.single('resume'), (req, res) => {
     }
 });
 
-router.get('/applications', authenticateToken, (req, res) => {
+router.get('/applications', authenticateToken, async (req, res) => {
     try {
         const stmt = db.prepare(`
             SELECT applications.*, careers.title as jobTitle 
@@ -148,7 +148,7 @@ router.get('/applications', authenticateToken, (req, res) => {
             LEFT JOIN careers ON applications.jobId = careers.id 
             ORDER BY applications.createdAt DESC
         `);
-        const applications = stmt.all();
+        const applications = await stmt.all();
         console.log('Fetched applications:', applications);
         res.json(applications);
     } catch (error) {
@@ -157,7 +157,7 @@ router.get('/applications', authenticateToken, (req, res) => {
     }
 });
 
-router.get('/analytics', authenticateToken, (req, res) => {
+router.get('/analytics', authenticateToken, async (req, res) => {
     try {
         // 1. Applications by Role
         const appsByRoleStmt = db.prepare(`
@@ -166,7 +166,7 @@ router.get('/analytics', authenticateToken, (req, res) => {
             LEFT JOIN applications a ON c.id = a.jobId
             GROUP BY c.title
         `);
-        const appsByRole = appsByRoleStmt.all();
+        const appsByRole = await appsByRoleStmt.all();
 
         // 2. Contact Subjects
         const contactsBySubjectStmt = db.prepare(`
@@ -174,7 +174,7 @@ router.get('/analytics', authenticateToken, (req, res) => {
             FROM contacts
             GROUP BY subject
         `);
-        const contactsBySubject = contactsBySubjectStmt.all();
+        const contactsBySubject = await contactsBySubjectStmt.all();
 
         // 3. Donations Over Time (Daily)
         const donationsOverTimeStmt = db.prepare(`
@@ -184,7 +184,7 @@ router.get('/analytics', authenticateToken, (req, res) => {
             ORDER BY date DESC
             LIMIT 30
         `);
-        const donationsOverTime = donationsOverTimeStmt.all().reverse();
+        const donationsOverTime = (await donationsOverTimeStmt.all()).reverse();
 
         res.json({
             appsByRole,
@@ -197,12 +197,12 @@ router.get('/analytics', authenticateToken, (req, res) => {
     }
 });
 
-router.put('/applications/:id/status', authenticateToken, (req, res) => {
+router.put('/applications/:id/status', authenticateToken, async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
     try {
         const stmt = db.prepare('UPDATE applications SET status = ? WHERE id = ?');
-        const info = stmt.run(status, id);
+        const info = await stmt.run(status, id);
         if (info.changes > 0) {
             res.json({ success: true });
         } else {
@@ -214,10 +214,10 @@ router.put('/applications/:id/status', authenticateToken, (req, res) => {
     }
 });
 
-router.get('/export/contacts', authenticateToken, (req, res) => {
+router.get('/export/contacts', authenticateToken, async (req, res) => {
     try {
         const stmt = db.prepare('SELECT * FROM contacts ORDER BY createdAt DESC');
-        const contacts = stmt.all();
+        const contacts = await stmt.all();
 
         const header = 'ID,Name,Email,Subject,Message,Date\n';
         const rows = contacts.map(c => {
@@ -236,10 +236,10 @@ router.get('/export/contacts', authenticateToken, (req, res) => {
     }
 });
 
-router.get('/export/donations', authenticateToken, (req, res) => {
+router.get('/export/donations', authenticateToken, async (req, res) => {
     try {
         const stmt = db.prepare('SELECT * FROM donations ORDER BY createdAt DESC');
-        const donations = stmt.all();
+        const donations = await stmt.all();
 
         const header = 'ID,Amount,Frequency,Payment Method,Date\n';
         const rows = donations.map(d => {
@@ -255,14 +255,14 @@ router.get('/export/donations', authenticateToken, (req, res) => {
     }
 });
 
-router.post('/newsletter', (req, res) => {
+router.post('/newsletter', async (req, res) => {
     const { email } = req.body;
     if (!email) {
         return res.status(400).json({ success: false, message: 'Email is required' });
     }
     try {
         const stmt = db.prepare('INSERT INTO subscribers (email) VALUES (?)');
-        stmt.run(email);
+        await stmt.run(email);
         res.json({ success: true, message: 'Subscribed successfully' });
     } catch (error) {
         if (error.message.includes('UNIQUE constraint failed')) {
@@ -273,14 +273,14 @@ router.post('/newsletter', (req, res) => {
     }
 });
 
-router.post('/seed', (req, res) => {
+router.post('/seed', async (req, res) => {
     const { secret } = req.body;
     if (secret !== 'ThinkMinntSecretKey2024') {
         return res.status(403).json({ success: false, message: 'Unauthorized' });
     }
 
     try {
-        const insertCareer = db.prepare('INSERT INTO careers (title, department, location, type, description, requirements) VALUES (@title, @department, @location, @type, @description, @requirements)');
+        const insertCareer = db.prepare('INSERT INTO careers (title, department, location, type, description, requirements) VALUES (?, ?, ?, ?, ?, ?)');
         const checkCareer = db.prepare('SELECT id FROM careers WHERE title = ?');
 
         const careers = [
@@ -375,13 +375,13 @@ router.post('/seed', (req, res) => {
         ];
 
         let addedCount = 0;
-        careers.forEach(career => {
-            const existing = checkCareer.get(career.title);
+        for (const career of careers) {
+            const existing = await checkCareer.get(career.title);
             if (!existing) {
-                insertCareer.run(career);
+                await insertCareer.run(career.title, career.department, career.location, career.type, career.description, career.requirements);
                 addedCount++;
             }
-        });
+        }
 
         res.json({ success: true, message: `Seeding complete. Added ${addedCount} new careers.` });
     } catch (error) {

@@ -40,7 +40,7 @@ const Navbar = () => {
     return (
         <nav
             className={`fixed w-full z-50 transition-all duration-300 ${scrolled
-                ? 'bg-white/80 backdrop-blur-xl shadow-lg border-b border-white/20 py-4'
+                ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl shadow-lg border-b border-white/20 dark:border-gray-800 py-4'
                 : 'bg-transparent py-6'
                 }`}
         >
@@ -59,7 +59,7 @@ const Navbar = () => {
                                 to={link.path}
                                 className={`text-sm font-medium transition-colors relative group ${location.pathname === link.path
                                     ? 'text-secondary'
-                                    : scrolled ? 'text-gray-600 hover:text-primary' : 'text-gray-200 hover:text-white'
+                                    : scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-white' : 'text-gray-200 hover:text-white'
                                     }`}
                             >
                                 {link.name}
@@ -68,7 +68,7 @@ const Navbar = () => {
                         ))}
                         <button
                             onClick={toggleTheme}
-                            className={`p-2 rounded-full transition-colors ${scrolled ? 'text-gray-600 hover:bg-gray-100' : 'text-white hover:bg-white/10'}`}
+                            className={`p-2 rounded-full transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800' : 'text-white hover:bg-white/10'}`}
                             aria-label="Toggle Dark Mode"
                         >
                             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}

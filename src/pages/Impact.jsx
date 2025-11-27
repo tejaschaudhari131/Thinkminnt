@@ -40,12 +40,12 @@ const Counter = ({ value, label, icon: Icon, suffix = "" }) => {
 
 const Impact = () => {
     const stats = [
-        { id: 1, value: 50000, label: "Lives Touched", icon: Users, suffix: "+" },
-        { id: 2, value: 12000, label: "Trees Planted", icon: TreePine, suffix: "" },
-        { id: 3, value: 25, label: "Communities Served", icon: Globe, suffix: "" },
-        { id: 4, value: 1500, label: "Volunteers Engaged", icon: Heart, suffix: "+" },
-        { id: 5, value: 8500, label: "Students Educated", icon: BookOpen, suffix: "" },
-        { id: 6, value: 100, label: "Projects Completed", icon: Smile, suffix: "%" },
+        { id: 1, value: 500, label: "Lives Touched", icon: Users, suffix: "+" },
+        { id: 2, value: 150, label: "Trees Planted", icon: TreePine, suffix: "" },
+        { id: 3, value: 3, label: "Communities Served", icon: Globe, suffix: "" },
+        { id: 4, value: 50, label: "Volunteers Engaged", icon: Heart, suffix: "+" },
+        { id: 5, value: 200, label: "Students Educated", icon: BookOpen, suffix: "" },
+        { id: 6, value: 5, label: "Projects Completed", icon: Smile, suffix: "" },
     ];
 
     return (
