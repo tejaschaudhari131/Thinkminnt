@@ -80,7 +80,18 @@ router.post('/login', (req, res) => {
 
 router.get('/contacts', authenticateToken, async (req, res) => {
     try {
-        const stmt = db.prepare('SELECT * FROM contacts ORDER BY createdAt DESC');
+        const stmt = db.prepare(`
+            SELECT 
+                id, 
+                firstname as "firstName", 
+                lastname as "lastName", 
+                email, 
+                subject, 
+                message, 
+                createdat as "createdAt" 
+            FROM contacts 
+            ORDER BY createdat DESC
+        `);
         const contacts = await stmt.all();
         res.json(contacts);
     } catch (error) {
@@ -91,7 +102,16 @@ router.get('/contacts', authenticateToken, async (req, res) => {
 
 router.get('/donations', authenticateToken, async (req, res) => {
     try {
-        const stmt = db.prepare('SELECT * FROM donations ORDER BY createdAt DESC');
+        const stmt = db.prepare(`
+            SELECT 
+                id, 
+                amount, 
+                frequency, 
+                paymentmethod as "paymentMethod", 
+                createdat as "createdAt" 
+            FROM donations 
+            ORDER BY createdat DESC
+        `);
         const donations = await stmt.all();
         res.json(donations);
     } catch (error) {
@@ -143,10 +163,21 @@ router.post('/apply', upload.single('resume'), async (req, res) => {
 router.get('/applications', authenticateToken, async (req, res) => {
     try {
         const stmt = db.prepare(`
-            SELECT applications.*, careers.title as jobTitle 
-            FROM applications 
-            LEFT JOIN careers ON applications.jobId = careers.id 
-            ORDER BY applications.createdAt DESC
+            SELECT 
+                a.id, 
+                a.jobid as "jobId", 
+                a.firstname as "firstName", 
+                a.lastname as "lastName", 
+                a.email, 
+                a.phone, 
+                a.resume, 
+                a.coverletter as "coverLetter", 
+                a.status, 
+                a.createdat as "createdAt",
+                c.title as "jobTitle" 
+            FROM applications a
+            LEFT JOIN careers c ON a.jobid = c.id 
+            ORDER BY a.createdat DESC
         `);
         const applications = await stmt.all();
         console.log('Fetched applications:', applications);
