@@ -184,15 +184,22 @@ const ChatBot = () => {
                         className="bg-gradient-to-r from-primary to-primary-600 text-white p-4 rounded-full shadow-lg hover:shadow-primary/30 transition-all flex items-center gap-2 group relative overflow-hidden"
                     >
                         <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 rounded-full"></div>
-                        <MessageCircle size={28} className="relative z-10" />
+
+                        <motion.div
+                            animate={{ rotate: [0, 20, -20, 20, 0] }}
+                            transition={{
+                                duration: 1.5,
+                                repeat: Infinity,
+                                repeatDelay: 2,
+                                ease: "easeInOut"
+                            }}
+                            className="relative z-10"
+                        >
+                            <Bot size={28} />
+                        </motion.div>
+
                         <span className="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-in-out whitespace-nowrap text-sm font-bold relative z-10">
                             Chat with AI
-                        </span>
-
-                        {/* Notification Dot */}
-                        <span className="absolute top-0 right-0 flex h-3 w-3">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
                         </span>
                     </motion.button>
                 )}
