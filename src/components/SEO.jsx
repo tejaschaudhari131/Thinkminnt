@@ -6,7 +6,7 @@ const SEO = ({ title, description, keywords, image, url, schema }) => {
     const defaultDescription = "ThinkMinnt Foundation is a non-profit organization dedicated to bridging the digital divide, fostering innovation, and providing quality education to underprivileged communities.";
     const defaultKeywords = "NGO, Education, Digital Literacy, Social Impact, Non-Profit, India, ThinkMinnt";
     const defaultImage = "/logo.jpg"; // Ensure this path is correct
-    const siteUrl = "https://thinkminnt.com"; // Replace with actual domain if known
+    const siteUrl = "https://thinkminnt.com";
 
     const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
     const metaDescription = description || defaultDescription;

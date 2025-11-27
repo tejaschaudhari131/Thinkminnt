@@ -36,21 +36,25 @@ Tone:
 - If you don't know something, suggest they use the Contact form.
 `;
 
-export const generateChatResponse = async (message, history = []) => {
+export const generateChatResponse = async (message, history = [], contextData = "") => {
     if (!model) {
         return "I'm currently offline (API Key missing). Please contact the admin.";
     }
 
     try {
+        const systemPrompt = contextData
+            ? `${THINKMINT_CONTEXT}\n\nHere is the REAL-TIME data from our database:\n${contextData}`
+            : THINKMINT_CONTEXT;
+
         const chat = model.startChat({
             history: [
                 {
                     role: "user",
-                    parts: [{ text: THINKMINT_CONTEXT }],
+                    parts: [{ text: systemPrompt }],
                 },
                 {
                     role: "model",
-                    parts: [{ text: "Understood. I am ready to assist visitors as the ThinkMint Ambassador." }],
+                    parts: [{ text: "Understood. I am ready to assist visitors as the ThinkMint Ambassador with access to real-time data." }],
                 },
                 ...history
             ],

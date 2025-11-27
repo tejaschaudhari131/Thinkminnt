@@ -50,7 +50,7 @@ router.get('/programs', async (req, res) => {
 });
 
 import jwt from 'jsonwebtoken';
-import { SECRET_KEY } from './index.js';
+const SECRET_KEY = 'ThinkMinntSecretKey2024';
 
 // Middleware to authenticate token
 const authenticateToken = (req, res, next) => {
@@ -426,7 +426,19 @@ import { generateChatResponse, generateImpactStory } from './ai-service.js';
 router.post('/ai/chat', async (req, res) => {
     const { message, history } = req.body;
     try {
-        const response = await generateChatResponse(message, history);
+        // Fetch real-time context from DB
+        const careers = await db.prepare('SELECT title, type, location FROM careers').all();
+        const programs = await db.prepare('SELECT title, category, description FROM programs').all();
+
+        const contextData = `
+        OPEN CAREER POSITIONS:
+        ${careers.map(c => `- ${c.title} (${c.type}, ${c.location})`).join('\n')}
+
+        ACTIVE PROGRAMS:
+        ${programs.map(p => `- ${p.title} (${p.category}): ${p.description}`).join('\n')}
+        `;
+
+        const response = await generateChatResponse(message, history, contextData);
         res.json({ success: true, response });
     } catch (error) {
         console.error(error);
@@ -439,6 +451,58 @@ router.post('/ai/impact', async (req, res) => {
     try {
         const story = await generateImpactStory(amount);
         res.json({ success: true, story });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// --- CMS Endpoints ---
+
+// Careers Management
+router.post('/careers', authenticateToken, async (req, res) => {
+    const { title, department, location, type, description, requirements } = req.body;
+    try {
+        const stmt = db.prepare('INSERT INTO careers (title, department, location, type, description, requirements) VALUES (?, ?, ?, ?, ?, ?)');
+        const info = await stmt.run(title, department, location, type, description, requirements);
+        res.json({ success: true, id: info.lastInsertRowid });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.delete('/careers/:id', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const stmt = db.prepare('DELETE FROM careers WHERE id = ?');
+        const info = await stmt.run(id);
+        res.json({ success: true, changes: info.changes });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Programs Management
+router.post('/programs', authenticateToken, async (req, res) => {
+    const { title, category, description, image, icon } = req.body;
+    try {
+        const stmt = db.prepare('INSERT INTO programs (title, category, description, image, icon) VALUES (?, ?, ?, ?, ?)');
+        const info = await stmt.run(title, category, description, image || '', icon || 'Code');
+        res.json({ success: true, id: info.lastInsertRowid });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.delete('/programs/:id', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const stmt = db.prepare('DELETE FROM programs WHERE id = ?');
+        const info = await stmt.run(id);
+        res.json({ success: true, changes: info.changes });
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, error: error.message });

@@ -12,6 +12,24 @@ const ChatBot = () => {
     const [isLoading, setIsLoading] = useState(false);
     const messagesEndRef = useRef(null);
 
+    const suggestedQuestions = [
+        "How can I donate?",
+        "What internships are open?",
+        "Tell me about your programs",
+        "How do I volunteer?"
+    ];
+
+    const formatMessage = (text) => {
+        // Simple bold formatter: **text** -> <strong>text</strong>
+        const parts = text.split(/(\*\*.*?\*\*)/g);
+        return parts.map((part, index) => {
+            if (part.startsWith('**') && part.endsWith('**')) {
+                return <strong key={index} className="font-bold text-primary-dark">{part.slice(2, -2)}</strong>;
+            }
+            return part;
+        });
+    };
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
@@ -107,11 +125,11 @@ const ChatBot = () => {
                                         )}
                                         <div
                                             className={`px-4 py-2.5 text-sm shadow-sm ${msg.role === 'user'
-                                                    ? 'bg-gradient-to-br from-primary to-primary-600 text-white rounded-2xl rounded-br-none'
-                                                    : 'bg-white text-gray-800 border border-gray-100 rounded-2xl rounded-bl-none'
+                                                ? 'bg-gradient-to-br from-primary to-primary-600 text-white rounded-2xl rounded-br-none'
+                                                : 'bg-white text-gray-800 border border-gray-100 rounded-2xl rounded-bl-none'
                                                 }`}
                                         >
-                                            {msg.text}
+                                            {formatMessage(msg.text)}
                                         </div>
                                     </div>
                                 </motion.div>
@@ -143,6 +161,25 @@ const ChatBot = () => {
                             )}
                             <div ref={messagesEndRef} />
                         </div>
+
+                        {/* Suggested Questions */}
+                        {messages.length < 3 && (
+                            <div className="px-4 py-2 flex gap-2 overflow-x-auto no-scrollbar">
+                                {suggestedQuestions.map((q, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => {
+                                            setInput(q);
+                                            // Optional: Auto-submit
+                                            // handleSubmit({ preventDefault: () => {} }); 
+                                        }}
+                                        className="whitespace-nowrap px-3 py-1.5 bg-gray-100 hover:bg-primary/10 hover:text-primary text-gray-600 text-xs rounded-full transition-colors border border-gray-200"
+                                    >
+                                        {q}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
 
                         {/* Input */}
                         <form onSubmit={handleSubmit} className="p-3 bg-white border-t border-gray-100 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">

@@ -11,7 +11,15 @@ const Admin = () => {
     const [contacts, setContacts] = useState([]);
     const [donations, setDonations] = useState([]);
     const [applications, setApplications] = useState([]);
+    const [careers, setCareers] = useState([]);
+    const [programs, setPrograms] = useState([]);
     const [analyticsData, setAnalyticsData] = useState(null);
+
+    // Form States
+    const [newCareer, setNewCareer] = useState({ title: '', department: '', location: '', type: 'Full-time', description: '', requirements: '' });
+    const [newProgram, setNewProgram] = useState({ title: '', category: '', description: '', icon: 'Code' });
+    const [showCareerForm, setShowCareerForm] = useState(false);
+    const [showProgramForm, setShowProgramForm] = useState(false);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -25,11 +33,13 @@ const Admin = () => {
 
             try {
                 const headers = { 'Authorization': `Bearer ${token}` };
-                const [contactsRes, donationsRes, applicationsRes, analyticsRes] = await Promise.all([
+                const [contactsRes, donationsRes, applicationsRes, analyticsRes, careersRes, programsRes] = await Promise.all([
                     fetch(`${API_URL}/api/contacts`, { headers }),
                     fetch(`${API_URL}/api/donations`, { headers }),
                     fetch(`${API_URL}/api/applications`, { headers }),
-                    fetch(`${API_URL}/api/analytics`, { headers })
+                    fetch(`${API_URL}/api/analytics`, { headers }),
+                    fetch(`${API_URL}/api/careers`),
+                    fetch(`${API_URL}/api/programs`)
                 ]);
 
                 if (contactsRes.status === 401 || contactsRes.status === 403 || donationsRes.status === 401 || donationsRes.status === 403 || applicationsRes.status === 401 || applicationsRes.status === 403 || analyticsRes.status === 401 || analyticsRes.status === 403) {
@@ -42,10 +52,15 @@ const Admin = () => {
                 const donationsData = donationsRes.ok ? await donationsRes.json() : [];
                 const applicationsData = applicationsRes.ok ? await applicationsRes.json() : [];
                 const analyticsJson = analyticsRes.ok ? await analyticsRes.json() : null;
+                const careersData = await careersRes.json(); // Public endpoint
+                const programsData = await programsRes.json(); // Public endpoint
 
                 setContacts(Array.isArray(contactsData) ? contactsData : []);
                 setDonations(Array.isArray(donationsData) ? donationsData : []);
                 setApplications(Array.isArray(applicationsData) ? applicationsData : []);
+                setApplications(Array.isArray(applicationsData) ? applicationsData : []);
+                setCareers(Array.isArray(careersData) ? careersData : []);
+                setPrograms(Array.isArray(programsData) ? programsData : []);
                 setAnalyticsData(analyticsJson);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -107,6 +122,74 @@ const Admin = () => {
             }
         } catch (error) {
             console.error('Error exporting data:', error);
+        }
+    };
+
+    const handleAddCareer = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/api/careers`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(newCareer)
+            });
+            if (response.ok) {
+                const resData = await response.json();
+                setCareers([...careers, { ...newCareer, id: resData.id }]);
+                setNewCareer({ title: '', department: '', location: '', type: 'Full-time', description: '', requirements: '' });
+                setShowCareerForm(false);
+            }
+        } catch (error) {
+            console.error('Error adding career:', error);
+        }
+    };
+
+    const handleDeleteCareer = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this job?')) return;
+        try {
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/api/careers/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            setCareers(careers.filter(c => c.id !== id));
+        } catch (error) {
+            console.error('Error deleting career:', error);
+        }
+    };
+
+    const handleAddProgram = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/api/programs`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(newProgram)
+            });
+            if (response.ok) {
+                const resData = await response.json();
+                setPrograms([...programs, { ...newProgram, id: resData.id }]);
+                setNewProgram({ title: '', category: '', description: '', icon: 'Code' });
+                setShowProgramForm(false);
+            }
+        } catch (error) {
+            console.error('Error adding program:', error);
+        }
+    };
+
+    const handleDeleteProgram = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this program?')) return;
+        try {
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/api/programs/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            setPrograms(programs.filter(p => p.id !== id));
+        } catch (error) {
+            console.error('Error deleting program:', error);
         }
     };
 
@@ -324,6 +407,114 @@ const Admin = () => {
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </section>
+
+                {/* CMS Section: Careers */}
+                <section className="mb-16">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-2xl font-bold text-gray-800">Manage Careers</h2>
+                        <Button onClick={() => setShowCareerForm(!showCareerForm)} size="sm">
+                            {showCareerForm ? 'Cancel' : 'Add New Job'}
+                        </Button>
+                    </div>
+
+                    {showCareerForm && (
+                        <div className="bg-white p-6 rounded-xl shadow-md mb-8 border border-gray-100">
+                            <form onSubmit={handleAddCareer} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input required placeholder="Job Title" className="p-2 border rounded" value={newCareer.title} onChange={e => setNewCareer({ ...newCareer, title: e.target.value })} />
+                                <input required placeholder="Department" className="p-2 border rounded" value={newCareer.department} onChange={e => setNewCareer({ ...newCareer, department: e.target.value })} />
+                                <input required placeholder="Location" className="p-2 border rounded" value={newCareer.location} onChange={e => setNewCareer({ ...newCareer, location: e.target.value })} />
+                                <select className="p-2 border rounded" value={newCareer.type} onChange={e => setNewCareer({ ...newCareer, type: e.target.value })}>
+                                    <option>Full-time</option>
+                                    <option>Part-time</option>
+                                    <option>Internship</option>
+                                    <option>Volunteer</option>
+                                </select>
+                                <textarea required placeholder="Description" className="p-2 border rounded md:col-span-2" rows="3" value={newCareer.description} onChange={e => setNewCareer({ ...newCareer, description: e.target.value })} />
+                                <textarea required placeholder="Requirements" className="p-2 border rounded md:col-span-2" rows="2" value={newCareer.requirements} onChange={e => setNewCareer({ ...newCareer, requirements: e.target.value })} />
+                                <div className="md:col-span-2">
+                                    <Button type="submit" size="sm">Post Job</Button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+
+                    <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {careers.map(c => (
+                                    <tr key={c.id}>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-900">{c.title}</td>
+                                        <td className="px-6 py-4 text-sm text-gray-500">{c.department}</td>
+                                        <td className="px-6 py-4 text-sm text-gray-500">{c.type}</td>
+                                        <td className="px-6 py-4 text-right">
+                                            <button onClick={() => handleDeleteCareer(c.id)} className="text-red-600 hover:text-red-900 text-sm font-medium">Delete</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                {/* CMS Section: Programs */}
+                <section className="mb-16">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-2xl font-bold text-gray-800">Manage Programs</h2>
+                        <Button onClick={() => setShowProgramForm(!showProgramForm)} size="sm">
+                            {showProgramForm ? 'Cancel' : 'Add New Program'}
+                        </Button>
+                    </div>
+
+                    {showProgramForm && (
+                        <div className="bg-white p-6 rounded-xl shadow-md mb-8 border border-gray-100">
+                            <form onSubmit={handleAddProgram} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <input required placeholder="Program Title" className="p-2 border rounded" value={newProgram.title} onChange={e => setNewProgram({ ...newProgram, title: e.target.value })} />
+                                <input required placeholder="Category" className="p-2 border rounded" value={newProgram.category} onChange={e => setNewProgram({ ...newProgram, category: e.target.value })} />
+                                <select className="p-2 border rounded" value={newProgram.icon} onChange={e => setNewProgram({ ...newProgram, icon: e.target.value })}>
+                                    <option value="Code">Code Icon</option>
+                                    <option value="Sprout">Sprout Icon</option>
+                                    <option value="BookOpen">Book Icon</option>
+                                    <option value="HeartHandshake">Heart Icon</option>
+                                </select>
+                                <textarea required placeholder="Description" className="p-2 border rounded md:col-span-2" rows="3" value={newProgram.description} onChange={e => setNewProgram({ ...newProgram, description: e.target.value })} />
+                                <div className="md:col-span-2">
+                                    <Button type="submit" size="sm">Launch Program</Button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
+
+                    <div className="bg-white shadow-md rounded-lg overflow-hidden">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-gray-50">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Title</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
+                                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200">
+                                {programs.map(p => (
+                                    <tr key={p.id}>
+                                        <td className="px-6 py-4 text-sm font-medium text-gray-900">{p.title}</td>
+                                        <td className="px-6 py-4 text-sm text-gray-500">{p.category}</td>
+                                        <td className="px-6 py-4 text-right">
+                                            <button onClick={() => handleDeleteProgram(p.id)} className="text-red-600 hover:text-red-900 text-sm font-medium">Delete</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
                     </div>
                 </section>
             </div>
