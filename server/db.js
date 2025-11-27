@@ -38,7 +38,7 @@ const initDatabase = async () => {
   // PG needs SERIAL.
 
   // Let's just do this:
-  const isPostgres = !!process.env.POSTGRES_URL || !!process.env.DATABASE_URL;
+  const isPostgres = process.env.NODE_ENV === 'production' || !!process.env.POSTGRES_URL || !!process.env.DATABASE_URL;
   const autoIncrement = isPostgres ? 'SERIAL' : 'INTEGER PRIMARY KEY AUTOINCREMENT';
   const textType = 'TEXT'; // PG supports TEXT.
 
