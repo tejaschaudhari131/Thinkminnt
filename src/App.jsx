@@ -60,12 +60,15 @@ const AnimatedRoutes = () => {
   );
 };
 
+import ChatBot from './components/ChatBot';
+
 function App() {
   return (
     <ThemeProvider>
       <Router>
         <ScrollToTop />
         <Cursor />
+        <ChatBot />
         <Layout>
           <AnimatedRoutes />
         </Layout>

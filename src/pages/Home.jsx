@@ -102,7 +102,7 @@ const Home = () => {
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Foundation</span>
                                 </motion.h1>
                                 <motion.p variants={fadeInUp} className="text-xl md:text-2xl text-gray-200 mb-10 leading-relaxed max-w-lg font-light">
-                                    A Section 8 Non-Profit Organization dedicated to <span className="text-white font-medium">Education</span>, <span className="text-white font-medium">Innovation</span>, and <span className="text-white font-medium">Child Development</span>.
+                                    Empowering students in <span className="text-white font-medium">MINT</span> (Math, Informatics, Natural Sciences, Tech) through innovation and community.
                                 </motion.p>
                                 <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-5">
                                     <Button to="/programs" variant="primary" size="lg" icon={ArrowRight} className="shadow-glow">

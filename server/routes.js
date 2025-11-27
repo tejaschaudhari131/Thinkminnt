@@ -421,4 +421,28 @@ router.post('/seed', async (req, res) => {
     }
 });
 
+import { generateChatResponse, generateImpactStory } from './ai-service.js';
+
+router.post('/ai/chat', async (req, res) => {
+    const { message, history } = req.body;
+    try {
+        const response = await generateChatResponse(message, history);
+        res.json({ success: true, response });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.post('/ai/impact', async (req, res) => {
+    const { amount } = req.body;
+    try {
+        const story = await generateImpactStory(amount);
+        res.json({ success: true, story });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 export default router;

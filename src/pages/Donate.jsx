@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Heart, Check, CreditCard, Gift } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Heart, Check, CreditCard, Gift, Sparkles } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SEO from '../components/SEO';
 import API_URL from '../config/api';
@@ -7,6 +7,33 @@ import API_URL from '../config/api';
 const Donate = () => {
     const [amount, setAmount] = useState(500);
     const [frequency, setFrequency] = useState('monthly');
+    const [impactStory, setImpactStory] = useState('');
+    const [loadingStory, setLoadingStory] = useState(false);
+
+    useEffect(() => {
+        const fetchImpact = async () => {
+            if (!amount || amount < 10) return;
+            setLoadingStory(true);
+            try {
+                const response = await fetch(`${API_URL}/api/ai/impact`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ amount })
+                });
+                const data = await response.json();
+                if (data.success && data.story) {
+                    setImpactStory(data.story);
+                }
+            } catch (error) {
+                console.error('Error fetching impact story:', error);
+            } finally {
+                setLoadingStory(false);
+            }
+        };
+
+        const timeoutId = setTimeout(fetchImpact, 800); // Debounce
+        return () => clearTimeout(timeoutId);
+    }, [amount]);
 
     const amounts = [100, 500, 1000, 2500, 5000];
 
@@ -74,8 +101,29 @@ const Donate = () => {
                                                     placeholder="Other"
                                                     className="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-200 focus:border-primary outline-none font-bold text-gray-700"
                                                     onChange={(e) => setAmount(Number(e.target.value))}
+                                                    value={amount}
                                                 />
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    {/* AI Impact Storyteller */}
+                                    <div className="mb-8 bg-indigo-50 border border-indigo-100 rounded-xl p-5 relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 p-2 opacity-10">
+                                            <Sparkles size={64} className="text-indigo-600" />
+                                        </div>
+                                        <div className="relative z-10">
+                                            <h3 className="text-indigo-900 font-bold text-sm mb-2 flex items-center gap-2">
+                                                <Sparkles size={16} className="text-indigo-600" />
+                                                Your Potential Impact
+                                            </h3>
+                                            {loadingStory ? (
+                                                <div className="h-6 w-3/4 bg-indigo-200/50 rounded animate-pulse"></div>
+                                            ) : (
+                                                <p className="text-indigo-800 text-sm italic leading-relaxed">
+                                                    "{impactStory || "Calculating impact..."}"
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
 

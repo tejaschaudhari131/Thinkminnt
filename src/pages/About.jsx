@@ -120,10 +120,13 @@ const About = () => {
                                 </h2>
                                 <div className="prose prose-lg text-gray-600">
                                     <p className="mb-6">
-                                        ThinkMinnt Foundation is a Section 8 Company (Non-Profit) incorporated on November 25, 2024. As a Section 8 company, our profits and income are applied solely toward the promotion of our charitable objects, with no dividends paid to members.
+                                        To empower high school students to pursue careers driven by passion, curiosity, and innovation in MINT (Mathematics, Informatics, Natural Sciences, and Technology) through interdisciplinary MINNT-based initiatives, integrating MINT with networking.
                                     </p>
                                     <p className="mb-6">
-                                        Our mission revolves around Education, Digital Literacy, and Innovation. We aim to bridge the digital divide and foster creativity in the next generation.
+                                        We aim to provide students with opportunities to engage in creativity, physical activities, and service-based learning, fostering personal growth, teamwork, leadership, and a sense of community responsibility. By participating in diverse projects and experiences that extend beyond academics, students develop essential life skills like collaboration, problem-solving, and time management.
+                                    </p>
+                                    <p className="mb-6">
+                                        This prepares them not only for higher education but also for meaningful contributions to society and successful careers in tech emerging fields like AI, cybersecurity, and data science. Our goal is to cultivate well-rounded individuals who are equipped to thrive in an evolving global landscape.
                                     </p>
                                 </div>
 
