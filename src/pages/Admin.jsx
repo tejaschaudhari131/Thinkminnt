@@ -519,7 +519,7 @@ const Admin = () => {
                                                         </select>
                                                     </td>
                                                     <td className="p-4">
-                                                        <a href={`${API_URL}/uploads/${app.resume}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm">
+                                                        <a href={`${API_URL}/api/uploads/${app.resume}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm">
                                                             Download
                                                         </a>
                                                     </td>
