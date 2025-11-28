@@ -12,8 +12,7 @@
     "start": "node server/index.js",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "predeploy": "npm run build"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
