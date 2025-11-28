@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '../components/Button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from 'recharts';
-import { Download } from 'lucide-react';
+import { Download, Plus, Trash2, X } from 'lucide-react'; // Added Plus, Trash2, X for modals/actions
 import API_URL from '../config/api';
 
 const COLORS = ['#2A9D8F', '#E9C46A', '#E76F51', '#264653', '#1A365D'];
@@ -13,13 +13,19 @@ const Admin = () => {
     const [applications, setApplications] = useState([]);
     const [careers, setCareers] = useState([]);
     const [programs, setPrograms] = useState([]);
+    const [events, setEvents] = useState([]); // New state for events
+    const [eventRegistrations, setEventRegistrations] = useState({}); // New state for registrations
     const [analyticsData, setAnalyticsData] = useState(null);
 
     // Form States
     const [newCareer, setNewCareer] = useState({ title: '', department: '', location: '', type: 'Full-time', description: '', requirements: '' });
     const [newProgram, setNewProgram] = useState({ title: '', category: '', description: '', icon: 'Code' });
+    const [newEvent, setNewEvent] = useState({ title: '', date: '', location: '', description: '', image: '' }); // New state for new event form
     const [showCareerForm, setShowCareerForm] = useState(false);
     const [showProgramForm, setShowProgramForm] = useState(false);
+    const [showAddEventModal, setShowAddEventModal] = useState(false); // New modal state
+    const [selectedEventId, setSelectedEventId] = useState(null); // For viewing registrations
+    const [showRegistrationsModal, setShowRegistrationsModal] = useState(false); // For viewing registrations
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
@@ -33,13 +39,14 @@ const Admin = () => {
 
             try {
                 const headers = { 'Authorization': `Bearer ${token}` };
-                const [contactsRes, donationsRes, applicationsRes, analyticsRes, careersRes, programsRes] = await Promise.all([
+                const [contactsRes, donationsRes, applicationsRes, analyticsRes, careersRes, programsRes, eventsRes] = await Promise.all([
                     fetch(`${API_URL}/api/contacts`, { headers }),
                     fetch(`${API_URL}/api/donations`, { headers }),
                     fetch(`${API_URL}/api/applications`, { headers }),
                     fetch(`${API_URL}/api/analytics`, { headers }),
                     fetch(`${API_URL}/api/careers`),
-                    fetch(`${API_URL}/api/programs`)
+                    fetch(`${API_URL}/api/programs`),
+                    fetch(`${API_URL}/api/events`) // Fetch events
                 ]);
 
                 if (contactsRes.status === 401 || contactsRes.status === 403 || donationsRes.status === 401 || donationsRes.status === 403 || applicationsRes.status === 401 || applicationsRes.status === 403 || analyticsRes.status === 401 || analyticsRes.status === 403) {
@@ -54,13 +61,14 @@ const Admin = () => {
                 const analyticsJson = analyticsRes.ok ? await analyticsRes.json() : null;
                 const careersData = await careersRes.json(); // Public endpoint
                 const programsData = await programsRes.json(); // Public endpoint
+                const eventsData = eventsRes.ok ? await eventsRes.json() : []; // Public endpoint
 
                 setContacts(Array.isArray(contactsData) ? contactsData : []);
                 setDonations(Array.isArray(donationsData) ? donationsData : []);
                 setApplications(Array.isArray(applicationsData) ? applicationsData : []);
-                setApplications(Array.isArray(applicationsData) ? applicationsData : []);
                 setCareers(Array.isArray(careersData) ? careersData : []);
                 setPrograms(Array.isArray(programsData) ? programsData : []);
+                setEvents(Array.isArray(eventsData) ? eventsData : []); // Set events
                 setAnalyticsData(analyticsJson);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -190,6 +198,69 @@ const Admin = () => {
             setPrograms(programs.filter(p => p.id !== id));
         } catch (error) {
             console.error('Error deleting program:', error);
+        }
+    };
+
+    // New Event Management Functions
+    const handleAddEvent = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const eventData = Object.fromEntries(formData.entries());
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/api/events`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(eventData)
+            });
+            if (response.ok) {
+                const resData = await response.json();
+                setEvents([...events, { ...eventData, id: resData.id, status: 'Upcoming' }]); // Assuming new events are upcoming
+                setNewEvent({ title: '', date: '', location: '', description: '', image: '' });
+                setShowAddEventModal(false);
+            } else {
+                console.error('Failed to add event');
+            }
+        } catch (error) {
+            console.error('Error adding event:', error);
+        }
+    };
+
+    const handleDeleteEvent = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this event?')) return;
+        try {
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/api/events/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            setEvents(events.filter(e => e.id !== id));
+        } catch (error) {
+            console.error('Error deleting event:', error);
+        }
+    };
+
+    const handleViewRegistrations = async (eventId) => {
+        setSelectedEventId(eventId);
+        setShowRegistrationsModal(true);
+        if (!eventRegistrations[eventId]) {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/api/events/${eventId}/registrations`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    setEventRegistrations(prev => ({ ...prev, [eventId]: data }));
+                } else {
+                    console.error('Failed to fetch registrations');
+                    setEventRegistrations(prev => ({ ...prev, [eventId]: [] }));
+                }
+            } catch (error) {
+                console.error('Error fetching registrations:', error);
+                setEventRegistrations(prev => ({ ...prev, [eventId]: [] }));
+            }
         }
     };
 
@@ -544,7 +615,106 @@ const Admin = () => {
                         </table>
                     </div>
                 </section>
+
+                {/* CMS Section: Events */}
+                <section className="mb-16">
+                    <div className="flex justify-between items-center mb-6">
+                        <h2 className="text-2xl font-bold text-gray-800">Manage Events</h2>
+                        <Button onClick={() => setShowAddEventModal(true)} size="sm" className="flex items-center gap-2">
+                            <Plus size={20} /> Add Event
+                        </Button>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-6">
+                        {events.map((event) => (
+                            <div key={event.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+                                <div className="flex justify-between items-start mb-4">
+                                    <div>
+                                        <h3 className="text-xl font-bold text-gray-900">{event.title}</h3>
+                                        <p className="text-sm text-gray-500">{new Date(event.date).toLocaleDateString()} • {event.location}</p>
+                                    </div>
+                                    <div className={`px-3 py-1 rounded-full text-xs font-bold ${new Date(event.date) > new Date() ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                                        {new Date(event.date) > new Date() ? 'Upcoming' : 'Past'}
+                                    </div>
+                                </div>
+                                <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
+                                <div className="mt-auto flex gap-3">
+                                    <Button onClick={() => handleViewRegistrations(event.id)} variant="outline" size="sm" className="flex-1">
+                                        View Signups
+                                    </Button>
+                                    <button
+                                        onClick={() => handleDeleteEvent(event.id)}
+                                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                    >
+                                        <Trash2 size={20} />
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
             </div>
+
+            {/* Add Event Modal */}
+            {showAddEventModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold">Add New Event</h3>
+                            <button onClick={() => setShowAddEventModal(false)}><X size={24} /></button>
+                        </div>
+                        <form onSubmit={handleAddEvent} className="space-y-4">
+                            <input name="title" placeholder="Event Title" required className="w-full p-2 border rounded-lg" value={newEvent.title} onChange={e => setNewEvent({ ...newEvent, title: e.target.value })} />
+                            <input name="date" type="date" required className="w-full p-2 border rounded-lg" value={newEvent.date} onChange={e => setNewEvent({ ...newEvent, date: e.target.value })} />
+                            <input name="location" placeholder="Location" required className="w-full p-2 border rounded-lg" value={newEvent.location} onChange={e => setNewEvent({ ...newEvent, location: e.target.value })} />
+                            <textarea name="description" placeholder="Description" required className="w-full p-2 border rounded-lg" rows="3" value={newEvent.description} onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}></textarea>
+                            <input name="image" placeholder="Image URL (Optional)" className="w-full p-2 border rounded-lg" value={newEvent.image} onChange={e => setNewEvent({ ...newEvent, image: e.target.value })} />
+                            <Button type="submit" className="w-full justify-center">Create Event</Button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* View Registrations Modal */}
+            {showRegistrationsModal && selectedEventId && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6 max-h-[80vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold">Event Registrations</h3>
+                            <button onClick={() => setShowRegistrationsModal(false)}><X size={24} /></button>
+                        </div>
+
+                        {!eventRegistrations[selectedEventId] ? (
+                            <p>Loading...</p>
+                        ) : eventRegistrations[selectedEventId].length === 0 ? (
+                            <p className="text-gray-500 text-center py-8">No registrations yet.</p>
+                        ) : (
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left">
+                                    <thead className="bg-gray-50">
+                                        <tr>
+                                            <th className="p-3 font-semibold text-gray-600">Name</th>
+                                            <th className="p-3 font-semibold text-gray-600">Email</th>
+                                            <th className="p-3 font-semibold text-gray-600">Phone</th>
+                                            <th className="p-3 font-semibold text-gray-600">Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-gray-100">
+                                        {eventRegistrations[selectedEventId].map((reg) => (
+                                            <tr key={reg.id}>
+                                                <td className="p-3">{reg.name}</td>
+                                                <td className="p-3">{reg.email}</td>
+                                                <td className="p-3">{reg.phone}</td>
+                                                <td className="p-3 text-sm text-gray-500">{new Date(reg.createdAt).toLocaleDateString()}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

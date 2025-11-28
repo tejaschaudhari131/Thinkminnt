@@ -211,18 +211,53 @@ const initDatabase = async () => {
       department: "General",
       location: "Pune / Remote",
       type: "Internship",
-      description: "A 4-week fast-track program during the winter break (December - January). Focuses on specific short-term projects and campaigns.",
-      requirements: "Availability during winter break. Quick learner and team player."
-    }
-  ];
+      date ${ textType },
+    location ${ textType },
+    description ${ textType },
+    image ${ textType },
+    status ${ textType } DEFAULT 'Upcoming'
+      `));
 
-  for (const career of careers) {
-    const existing = await checkCareer.get(career.title);
-    if (!existing) {
-      await insertCareer.run(career.title, career.department, career.location, career.type, career.description, career.requirements);
-      console.log(`Seeded career: ${career.title}`);
-    }
+// Create Event Registrations Table
+await db.exec(createTable('event_registrations', `
+    id ${ autoIncrement },
+    eventId INTEGER,
+    name ${ textType },
+    email ${ textType },
+    phone ${ textType },
+    createdAt ${ isPostgres? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP': 'DATETIME DEFAULT CURRENT_TIMESTAMP' }
+      `));
+
+// Seed Events
+const insertEvent = db.prepare('INSERT INTO events (title, date, location, description, image, status) VALUES (?, ?, ?, ?, ?, ?)');
+const checkEvent = db.prepare('SELECT id FROM events WHERE title = ?');
+
+const events = [
+  {
+    title: "Tech for All Workshop",
+    date: "2024-12-15",
+    location: "Pune Community Center",
+    description: "A hands-on coding workshop for students from underprivileged backgrounds. Volunteers needed to mentor students.",
+    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    status: "Upcoming"
+  },
+  {
+    title: "Green City Plantation Drive",
+    date: "2024-12-20",
+    location: "Riverside Park, Pune",
+    description: "Join us to plant 500 saplings and make our city greener. Tools and refreshments provided.",
+    image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    status: "Upcoming"
   }
+];
+
+for (const event of events) {
+  const existing = await checkEvent.get(event.title);
+  if (!existing) {
+    await insertEvent.run(event.title, event.date, event.location, event.description, event.image, event.status);
+    console.log(`Seeded event: ${ event.title }`);
+  }
+}
 };
 
 export { initDatabase };

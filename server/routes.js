@@ -209,36 +209,120 @@ router.get('/analytics', authenticateToken, async (req, res) => {
         `);
         const appsByRole = await appsByRoleStmt.all();
 
-        // 2. Contact Subjects
-        const contactsBySubjectStmt = db.prepare(`
+        // 2. Donations Over Time
+        const donationsStmt = db.prepare(`
+            SELECT date(createdAt) as date, SUM(amount) as total
+            FROM donations
+            GROUP BY date(createdAt)
+            ORDER BY date(createdAt) DESC
+            LIMIT 30
+        `);
+        const donationsOverTime = await donationsStmt.all();
+
+        res.json({
+            appsByRole,
+            donationsOverTime: donationsOverTime.reverse() // Show oldest to newest
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// --- EVENTS ROUTES ---
+
+// Get all events (Public)
+router.get('/events', async (req, res) => {
+    try {
+        const stmt = db.prepare('SELECT * FROM events ORDER BY date ASC');
+        const events = await stmt.all();
+        res.json(events);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Create new event (Admin)
+router.post('/events', authenticateToken, async (req, res) => {
+    const { title, date, location, description, image } = req.body;
+    try {
+        const stmt = db.prepare('INSERT INTO events (title, date, location, description, image) VALUES (?, ?, ?, ?, ?)');
+        const info = await stmt.run(title, date, location, description, image);
+        res.json({ success: true, id: info.lastInsertRowid });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Delete event (Admin)
+router.delete('/events/:id', authenticateToken, async (req, res) => {
+    try {
+        const stmt = db.prepare('DELETE FROM events WHERE id = ?');
+        await stmt.run(req.params.id);
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Register for event (Public)
+router.post('/events/register', async (req, res) => {
+    const { eventId, name, email, phone } = req.body;
+    try {
+        const stmt = db.prepare('INSERT INTO event_registrations (eventId, name, email, phone) VALUES (?, ?, ?, ?)');
+        const info = await stmt.run(eventId, name, email, phone);
+        res.json({ success: true, id: info.lastInsertRowid });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Get registrations for an event (Admin)
+router.get('/events/registrations/:id', authenticateToken, async (req, res) => {
+    try {
+        const stmt = db.prepare('SELECT * FROM event_registrations WHERE eventId = ? ORDER BY createdAt DESC');
+        const registrations = await stmt.all();
+        res.json(registrations);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// 2. Contact Subjects
+const contactsBySubjectStmt = db.prepare(`
             SELECT subject, COUNT(*) as count
             FROM contacts
             GROUP BY subject
         `);
-        const contactsBySubject = await contactsBySubjectStmt.all();
+const contactsBySubject = await contactsBySubjectStmt.all();
 
-        // 3. Donations Over Time (Daily)
-        const isPostgres = process.env.NODE_ENV === 'production';
-        const dateExpr = isPostgres ? "TO_CHAR(createdAt, 'YYYY-MM-DD')" : "strftime('%Y-%m-%d', createdAt)";
+// 3. Donations Over Time (Daily)
+const isPostgres = process.env.NODE_ENV === 'production';
+const dateExpr = isPostgres ? "TO_CHAR(createdAt, 'YYYY-MM-DD')" : "strftime('%Y-%m-%d', createdAt)";
 
-        const donationsOverTimeStmt = db.prepare(`
+const donationsOverTimeStmt = db.prepare(`
             SELECT ${dateExpr} as date, SUM(amount) as total
             FROM donations
             GROUP BY 1
             ORDER BY 1 DESC
             LIMIT 30
         `);
-        const donationsOverTime = (await donationsOverTimeStmt.all()).reverse();
+const donationsOverTime = (await donationsOverTimeStmt.all()).reverse();
 
-        res.json({
-            appsByRole,
-            contactsBySubject,
-            donationsOverTime
-        });
+res.json({
+    appsByRole,
+    contactsBySubject,
+    donationsOverTime
+});
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: error.message });
-    }
+    console.error(error);
+    res.status(500).json({ success: false, error: error.message });
+}
 });
 
 router.put('/applications/:id/status', authenticateToken, async (req, res) => {
