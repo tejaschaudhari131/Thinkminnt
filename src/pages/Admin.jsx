@@ -285,7 +285,8 @@ const Admin = () => {
                         </Button>
                     </div>
                     <div className="bg-white shadow-md rounded-lg overflow-hidden">
-                        <div className="overflow-x-auto">
+                        {/* Desktop Table View */}
+                        <div className="hidden md:block overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-200">
                                 <thead className="bg-gray-50">
                                     <tr>
@@ -300,8 +301,8 @@ const Admin = () => {
                                 <tbody className="bg-white divide-y divide-gray-200">
                                     {contacts.map((contact) => (
                                         <tr key={contact.id}>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{contact.id}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{contact.firstName} {contact.lastName}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">#{contact.id}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{contact.name}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{contact.email}</td>
                                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{contact.subject}</td>
                                             <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{contact.message}</td>
@@ -310,6 +311,32 @@ const Admin = () => {
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+
+                        {/* Mobile Card View */}
+                        <div className="md:hidden space-y-4 p-4">
+                            {contacts.map((contact) => (
+                                <div key={contact.id} className="bg-gray-50 p-4 rounded-lg border border-gray-200 space-y-2">
+                                    <div className="flex justify-between items-start">
+                                        <div>
+                                            <p className="font-bold text-gray-900">{contact.name}</p>
+                                            <p className="text-sm text-gray-500">{contact.email}</p>
+                                        </div>
+                                        <span className="text-xs font-mono text-gray-400">#{contact.id}</span>
+                                    </div>
+                                    <div className="pt-2 border-t border-gray-200 mt-2">
+                                        <p className="text-xs font-semibold text-gray-500 uppercase">Subject</p>
+                                        <p className="text-sm text-gray-800">{contact.subject}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-semibold text-gray-500 uppercase">Message</p>
+                                        <p className="text-sm text-gray-600 line-clamp-3">{contact.message}</p>
+                                    </div>
+                                    <div className="text-right text-xs text-gray-400 pt-2">
+                                        {new Date(contact.createdAt).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </section>

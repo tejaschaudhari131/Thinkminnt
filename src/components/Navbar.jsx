@@ -109,23 +109,27 @@ const Navbar = () => {
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
                         exit={{ opacity: 0, height: 0 }}
-                        className="md:hidden bg-white border-t border-gray-100 overflow-hidden"
+                        className="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-t border-gray-100 dark:border-gray-800 overflow-hidden"
                     >
                         <div className="px-4 pt-4 pb-6 space-y-2 shadow-xl">
                             {navLinks.map((link) => (
                                 <Link
                                     key={link.name}
                                     to={link.path}
-                                    className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${location.pathname === link.path
-                                        ? 'bg-primary/5 text-primary'
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                    onClick={() => setIsOpen(false)}
+                                    className={`flex items-center justify-between px-4 py-3 rounded-xl text-base font-medium transition-all ${location.pathname === link.path
+                                        ? 'bg-primary/10 text-primary dark:text-primary-light'
+                                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
                                         }`}
                                 >
                                     {link.name}
+                                    {location.pathname === link.path && (
+                                        <motion.div layoutId="activeDot" className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                    )}
                                 </Link>
                             ))}
                             <div className="pt-4 px-4">
-                                <Button to="/donate" variant="primary" className="w-full justify-center">
+                                <Button to="/donate" variant="primary" className="w-full justify-center shadow-lg shadow-primary/20">
                                     Donate Now
                                 </Button>
                             </div>

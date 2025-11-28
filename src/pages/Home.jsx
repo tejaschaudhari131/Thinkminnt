@@ -91,42 +91,42 @@ const Home = () => {
                                 initial="hidden"
                                 animate="visible"
                                 variants={staggerContainer}
-                                className="max-w-3xl"
+                                className="max-w-3xl pt-12 md:pt-0"
                             >
-                                <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-accent font-semibold text-sm mb-8 border border-white/10 backdrop-blur-md">
+                                <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-accent font-semibold text-sm mb-6 md:mb-8 border border-white/10 backdrop-blur-md">
                                     <Sparkles size={16} />
                                     Est. November 2024
                                 </motion.div>
-                                <motion.h1 variants={fadeInUp} className="text-6xl md:text-8xl font-bold font-heading mb-8 leading-tight tracking-tight">
+                                <motion.h1 variants={fadeInUp} className="text-4xl sm:text-5xl md:text-8xl font-bold font-heading mb-6 md:mb-8 leading-tight tracking-tight">
                                     Think<span className="text-secondary">Minnt</span> <br />
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">Foundation</span>
                                 </motion.h1>
-                                <motion.p variants={fadeInUp} className="text-xl md:text-2xl text-gray-200 mb-10 leading-relaxed max-w-lg font-light">
+                                <motion.p variants={fadeInUp} className="text-lg md:text-2xl text-gray-200 mb-8 md:mb-10 leading-relaxed max-w-lg font-light">
                                     Empowering students in <span className="text-white font-medium">MINT</span> (Math, Informatics, Natural Sciences, Tech) through innovation and community.
                                 </motion.p>
-                                <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-5">
-                                    <Button to="/programs" variant="primary" size="lg" icon={ArrowRight} className="shadow-glow">
+                                <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 sm:gap-5">
+                                    <Button to="/programs" variant="primary" size="lg" icon={ArrowRight} className="shadow-glow w-full sm:w-auto justify-center">
                                         Our Programs
                                     </Button>
-                                    <Button to="/donate" variant="outline" size="lg" className="border-white/30 hover:bg-white/10">
+                                    <Button to="/donate" variant="outline" size="lg" className="border-white/30 hover:bg-white/10 w-full sm:w-auto justify-center">
                                         Make a Donation
                                     </Button>
                                 </motion.div>
                             </motion.div>
 
-                            {/* Hero Image Card */}
+                            {/* Hero Image Card - Now visible on mobile but scaled down */}
                             <motion.div
                                 initial={{ opacity: 0, x: 50, rotate: 5 }}
                                 animate={{ opacity: 1, x: 0, rotate: 3 }}
                                 transition={{ duration: 1, delay: 0.4, type: "spring" }}
-                                className="hidden lg:block relative"
+                                className="relative mt-8 lg:mt-0"
                             >
-                                <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-8 border-white/10 backdrop-blur-sm transform hover:rotate-0 transition-transform duration-700">
+                                <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 md:border-8 border-white/10 backdrop-blur-sm transform hover:rotate-0 transition-transform duration-700">
                                     <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Community Impact" className="w-full h-auto scale-105 hover:scale-100 transition-transform duration-700" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                    <div className="absolute bottom-8 left-8 text-white">
-                                        <p className="font-heading font-bold text-2xl">Empowering Youth</p>
-                                        <p className="text-gray-300">Building a brighter tomorrow</p>
+                                    <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8 text-white">
+                                        <p className="font-heading font-bold text-lg md:text-2xl">Empowering Youth</p>
+                                        <p className="text-gray-300 text-sm md:text-base">Building a brighter tomorrow</p>
                                     </div>
                                 </div>
 
@@ -134,11 +134,11 @@ const Home = () => {
                                 <motion.div
                                     animate={{ y: [0, -15, 0] }}
                                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                                    className="absolute -top-10 -right-10 w-32 h-32 bg-accent rounded-full flex items-center justify-center shadow-xl z-20 border-4 border-white/20"
+                                    className="absolute -top-6 -right-4 md:-top-10 md:-right-10 w-24 h-24 md:w-32 md:h-32 bg-accent rounded-full flex items-center justify-center shadow-xl z-20 border-4 border-white/20"
                                 >
                                     <div className="text-center text-primary-dark">
-                                        <span className="block text-3xl font-bold font-heading">100%</span>
-                                        <span className="text-xs font-bold uppercase tracking-wider">Non-Profit</span>
+                                        <span className="block text-xl md:text-3xl font-bold font-heading">100%</span>
+                                        <span className="text-[10px] md:text-xs font-bold uppercase tracking-wider">Non-Profit</span>
                                     </div>
                                 </motion.div>
                             </motion.div>
