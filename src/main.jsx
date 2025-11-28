@@ -8,13 +8,12 @@ import { ThemeProvider } from './context/ThemeContext'
 
 import { HelmetProvider } from 'react-helmet-async';
 
+console.log('ThinkMint App Starting...');
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <HelmetProvider>
       <ErrorBoundary>
-        <ThemeProvider>
-          <App />
-        </ThemeProvider>
+        <App />
       </ErrorBoundary>
     </HelmetProvider>
   </StrictMode>,

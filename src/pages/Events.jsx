@@ -21,7 +21,7 @@ const Events = () => {
 
     const fetchEvents = async () => {
         try {
-            const response = await fetch(`${API_URL}/events`);
+            const response = await fetch(`${API_URL}/api/events`);
             const data = await response.json();
             setEvents(data);
         } catch (error) {
@@ -42,7 +42,7 @@ const Events = () => {
         e.preventDefault();
         setSubmitting(true);
         try {
-            const response = await fetch(`${API_URL}/events/register`, {
+            const response = await fetch(`${API_URL}/api/events/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...formData, eventId: selectedEvent.id }),
