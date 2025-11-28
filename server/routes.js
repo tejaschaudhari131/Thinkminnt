@@ -208,11 +208,14 @@ router.get('/analytics', authenticateToken, async (req, res) => {
         const contactsBySubject = await contactsBySubjectStmt.all();
 
         // 3. Donations Over Time (Daily)
+        const isPostgres = process.env.NODE_ENV === 'production';
+        const dateExpr = isPostgres ? "TO_CHAR(createdAt, 'YYYY-MM-DD')" : "strftime('%Y-%m-%d', createdAt)";
+
         const donationsOverTimeStmt = db.prepare(`
-            SELECT strftime('%Y-%m-%d', createdAt) as date, SUM(amount) as total
+            SELECT ${dateExpr} as date, SUM(amount) as total
             FROM donations
-            GROUP BY date
-            ORDER BY date DESC
+            GROUP BY 1
+            ORDER BY 1 DESC
             LIMIT 30
         `);
         const donationsOverTime = (await donationsOverTimeStmt.all()).reverse();
