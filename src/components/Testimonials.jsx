@@ -87,7 +87,7 @@ const Testimonials = () => {
                     </p>
                 </div>
 
-                <div className="relative h-[400px] flex items-center justify-center">
+                <div className="relative h-[600px] md:h-[400px] flex items-center justify-center">
                     <AnimatePresence initial={false} custom={direction}>
                         <motion.div
                             key={currentIndex}
@@ -100,11 +100,11 @@ const Testimonials = () => {
                                 x: { type: "spring", stiffness: 300, damping: 30 },
                                 opacity: { duration: 0.2 }
                             }}
-                            className="absolute w-full max-w-4xl"
+                            className="absolute w-full max-w-4xl px-4 md:px-0"
                         >
                             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-3xl p-8 md:p-12 text-center">
                                 <Quote size={48} className="text-secondary mx-auto mb-6 opacity-50" />
-                                <p className="text-2xl md:text-3xl font-serif text-white mb-8 leading-relaxed italic">
+                                <p className="text-xl md:text-3xl font-serif text-white mb-8 leading-relaxed italic">
                                     "{testimonials[currentIndex].content}"
                                 </p>
                                 <div className="flex flex-col items-center">
@@ -125,16 +125,16 @@ const Testimonials = () => {
                         </motion.div>
                     </AnimatePresence>
 
-                    {/* Navigation Buttons */}
+                    {/* Navigation Buttons - Hidden on mobile to prevent overlap */}
                     <button
                         onClick={prevSlide}
-                        className="absolute left-0 md:-left-12 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-sm z-20"
+                        className="hidden md:block absolute left-0 md:-left-12 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-sm z-20"
                     >
                         <ChevronLeft size={24} />
                     </button>
                     <button
                         onClick={nextSlide}
-                        className="absolute right-0 md:-right-12 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-sm z-20"
+                        className="hidden md:block absolute right-0 md:-right-12 top-1/2 -translate-y-1/2 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors backdrop-blur-sm z-20"
                     >
                         <ChevronRight size={24} />
                     </button>

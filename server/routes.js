@@ -209,19 +209,31 @@ router.get('/analytics', authenticateToken, async (req, res) => {
         `);
         const appsByRole = await appsByRoleStmt.all();
 
-        // 2. Donations Over Time
+        // 2. Contact Subjects
+        const contactsBySubjectStmt = db.prepare(`
+            SELECT subject, COUNT(*) as count
+            FROM contacts
+            GROUP BY subject
+        `);
+        const contactsBySubject = await contactsBySubjectStmt.all();
+
+        // 3. Donations Over Time (Daily)
+        const isPostgres = process.env.NODE_ENV === 'production';
+        const dateExpr = isPostgres ? "TO_CHAR(createdAt, 'YYYY-MM-DD')" : "strftime('%Y-%m-%d', createdAt)";
+
         const donationsStmt = db.prepare(`
-            SELECT date(createdAt) as date, SUM(amount) as total
+            SELECT ${dateExpr} as date, SUM(amount) as total
             FROM donations
-            GROUP BY date(createdAt)
-            ORDER BY date(createdAt) DESC
+            GROUP BY 1
+            ORDER BY 1 DESC
             LIMIT 30
         `);
-        const donationsOverTime = await donationsStmt.all();
+        const donationsOverTime = (await donationsStmt.all()).reverse();
 
         res.json({
             appsByRole,
-            donationsOverTime: donationsOverTime.reverse() // Show oldest to newest
+            contactsBySubject,
+            donationsOverTime
         });
     } catch (error) {
         console.error(error);
@@ -291,38 +303,6 @@ router.get('/events/registrations/:id', authenticateToken, async (req, res) => {
         console.error(error);
         res.status(500).json({ success: false, error: error.message });
     }
-});
-
-// 2. Contact Subjects
-const contactsBySubjectStmt = db.prepare(`
-            SELECT subject, COUNT(*) as count
-            FROM contacts
-            GROUP BY subject
-        `);
-const contactsBySubject = await contactsBySubjectStmt.all();
-
-// 3. Donations Over Time (Daily)
-const isPostgres = process.env.NODE_ENV === 'production';
-const dateExpr = isPostgres ? "TO_CHAR(createdAt, 'YYYY-MM-DD')" : "strftime('%Y-%m-%d', createdAt)";
-
-const donationsOverTimeStmt = db.prepare(`
-            SELECT ${dateExpr} as date, SUM(amount) as total
-            FROM donations
-            GROUP BY 1
-            ORDER BY 1 DESC
-            LIMIT 30
-        `);
-const donationsOverTime = (await donationsOverTimeStmt.all()).reverse();
-
-res.json({
-    appsByRole,
-    contactsBySubject,
-    donationsOverTime
-});
-    } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, error: error.message });
-}
 });
 
 router.put('/applications/:id/status', authenticateToken, async (req, res) => {
