@@ -4,7 +4,7 @@ import { Calendar, MapPin, Clock, X, CheckCircle } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SEO from '../components/SEO';
 import Button from '../components/Button';
-import { API_URL } from '../config/api';
+import API_URL from '../config/api';
 
 const Events = () => {
     const [events, setEvents] = useState([]);
