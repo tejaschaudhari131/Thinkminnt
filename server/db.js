@@ -66,10 +66,22 @@ const initDatabase = async () => {
   // Migration to add columns if they don't exist (for existing production DB)
   try {
     await db.exec(`ALTER TABLE applications ADD COLUMN resumeData ${isPostgres ? 'BYTEA' : 'BLOB'}`);
-    await db.exec(`ALTER TABLE applications ADD COLUMN resumeType ${textType}`);
-    console.log('Added resumeData and resumeType columns to applications table');
+    console.log('Added resumeData column to applications table');
   } catch (err) {
-    // Columns likely already exist
+    // Ignore if column already exists
+    if (!err.message.includes('duplicate column') && !err.message.includes('already exists')) {
+      console.log('Note: resumeData column might already exist or error:', err.message);
+    }
+  }
+
+  try {
+    await db.exec(`ALTER TABLE applications ADD COLUMN resumeType ${textType}`);
+    console.log('Added resumeType column to applications table');
+  } catch (err) {
+    // Ignore if column already exists
+    if (!err.message.includes('duplicate column') && !err.message.includes('already exists')) {
+      console.log('Note: resumeType column might already exist or error:', err.message);
+    }
   }
 
   await db.exec(createTable('subscribers', `

@@ -29,6 +29,8 @@ const allowedOrigins = [
     'https://thinkminnt.vercel.app',
     'https://thinkminnt-*.vercel.app', // Allow all Vercel preview deployments
     'https://tejaschaudhari131.github.io', // Allow GitHub Pages
+    'https://thinkminnt-api.onrender.com', // Render Default URL
+    'https://api.thinkminnt.com', // Custom Domain for API
     process.env.FRONTEND_URL // Allow custom frontend URL from environment variable
 ].filter(Boolean);
 
