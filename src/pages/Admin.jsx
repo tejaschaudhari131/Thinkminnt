@@ -275,130 +275,188 @@ const Admin = () => {
 
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
+    const SidebarItem = ({ icon: Icon, label, active, onClick, isOpen }) => (
+        <button
+            onClick={onClick}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${active ? 'bg-primary text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'} ${!isOpen && 'justify-center'}`}
+            title={!isOpen ? label : ''}
+        >
+            <Icon size={20} />
+            {isOpen && <span className="font-medium">{label}</span>}
+        </button>
+    );
+
     return (
-        <div className="min-h-screen bg-gray-50 flex">
-            {/* Sidebar */}
-            <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}>
-                <div className="p-6 border-b border-gray-100 flex justify-between items-center">
-                    <h1 className="text-2xl font-bold text-primary">Admin</h1>
-                    <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-gray-500"><X size={24} /></button>
+        <div className="min-h-screen bg-gray-50 pt-20 flex">
+            {/* Desktop Sidebar */}
+            <aside
+                className={`fixed left-0 top-20 h-[calc(100vh-5rem)] bg-white shadow-xl z-40 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-64' : 'w-20'} hidden md:flex flex-col`}
+            >
+                <div className="p-4 flex-1 overflow-y-auto">
+                    <nav className="space-y-2">
+                        {menuItems.map((item) => (
+                            <SidebarItem
+                                key={item.id}
+                                icon={item.icon}
+                                label={item.label}
+                                active={activeTab === item.id}
+                                onClick={() => setActiveTab(item.id)}
+                                isOpen={isSidebarOpen}
+                            />
+                        ))}
+                    </nav>
                 </div>
-                <nav className="p-4 space-y-2">
-                    {menuItems.map((item) => (
-                        <button
-                            key={item.id}
-                            onClick={() => { setActiveTab(item.id); setIsSidebarOpen(false); }}
-                            className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === item.id ? 'bg-primary text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'}`}
-                        >
-                            <item.icon size={20} />
-                            <span className="font-medium">{item.label}</span>
-                        </button>
-                    ))}
-                    <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 mt-8">
+                <div className="p-4 border-t border-gray-100">
+                    <button
+                        onClick={handleLogout}
+                        className={`flex items-center gap-3 text-red-600 hover:bg-red-50 p-3 rounded-xl w-full transition-colors ${!isSidebarOpen && 'justify-center'}`}
+                        title={!isSidebarOpen ? 'Logout' : ''}
+                    >
+                        <LogOut size={20} />
+                        {isSidebarOpen && <span className="font-medium">Logout</span>}
+                    </button>
+                    <button
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        className="mt-4 flex items-center justify-center w-full text-gray-400 hover:text-gray-600"
+                    >
+                        <Menu size={20} />
+                    </button>
+                </div>
+            </aside>
+
+            {/* Mobile Sidebar Overlay */}
+            {isSidebarOpen && (
+                <div className="fixed inset-0 bg-black/50 z-30 md:hidden" onClick={() => setIsSidebarOpen(false)}></div>
+            )}
+
+            {/* Mobile Sidebar */}
+            <aside
+                className={`fixed left-0 top-20 h-[calc(100vh-5rem)] bg-white shadow-xl z-40 transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} w-64 md:hidden flex flex-col`}
+            >
+                <div className="p-4 flex-1 overflow-y-auto">
+                    <nav className="space-y-2">
+                        {menuItems.map((item) => (
+                            <button
+                                key={item.id}
+                                onClick={() => { setActiveTab(item.id); setIsSidebarOpen(false); }}
+                                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${activeTab === item.id ? 'bg-primary text-white shadow-md' : 'text-gray-600 hover:bg-gray-50'}`}
+                            >
+                                <item.icon size={20} />
+                                <span className="font-medium">{item.label}</span>
+                            </button>
+                        ))}
+                    </nav>
+                </div>
+                <div className="p-4 border-t border-gray-100">
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 text-red-600 hover:bg-red-50 p-3 rounded-xl w-full transition-colors"
+                    >
                         <LogOut size={20} />
                         <span className="font-medium">Logout</span>
                     </button>
-                </nav>
-            </div>
+                </div>
+            </aside>
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col min-w-0 h-screen overflow-hidden">
-                {/* Mobile Header */}
-                <div className="md:hidden bg-white p-4 shadow-sm flex items-center gap-4">
-                    <button onClick={() => setIsSidebarOpen(true)} className="text-gray-600"><Menu size={24} /></button>
-                    <h1 className="text-xl font-bold text-gray-900">Dashboard</h1>
-                </div>
+            <main className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'md:ml-64' : 'md:ml-20'} p-6 md:p-8 overflow-x-hidden`}>
+                <div className="max-w-7xl mx-auto">
+                    {/* Mobile Header */}
+                    <div className="md:hidden flex items-center justify-between mb-6">
+                        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+                        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 bg-white rounded-lg shadow-sm">
+                            <Menu size={24} />
+                        </button>
+                    </div>
 
-                <div className="flex-1 overflow-y-auto p-4 md:p-8">
-                    <div className="max-w-6xl mx-auto">
-
-                        {/* Overview Tab */}
-                        {activeTab === 'overview' && analyticsData && (
-                            <div className="space-y-8">
-                                <h2 className="text-2xl font-bold text-gray-800">Analytics Overview</h2>
-                                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                                        <h3 className="text-lg font-semibold mb-4">Applications by Role</h3>
-                                        <div className="h-80">
-                                            <ResponsiveContainer width="100%" height="100%">
-                                                <BarChart data={analyticsData.appsByRole}>
-                                                    <CartesianGrid strokeDasharray="3 3" />
-                                                    <XAxis dataKey="title" />
-                                                    <YAxis allowDecimals={false} />
-                                                    <Tooltip />
-                                                    <Bar dataKey="count" fill="#2A9D8F" />
-                                                </BarChart>
-                                            </ResponsiveContainer>
-                                        </div>
+                    {/* Overview Tab */}
+                    {activeTab === 'overview' && analyticsData && (
+                        <div className="space-y-8">
+                            <h2 className="text-2xl font-bold text-gray-800">Analytics Overview</h2>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                                    <h3 className="text-lg font-semibold mb-4">Applications by Role</h3>
+                                    <div className="h-80">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <BarChart data={analyticsData.appsByRole}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="title" />
+                                                <YAxis allowDecimals={false} />
+                                                <Tooltip />
+                                                <Bar dataKey="count" fill="#2A9D8F" />
+                                            </BarChart>
+                                        </ResponsiveContainer>
                                     </div>
-                                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                                        <h3 className="text-lg font-semibold mb-4">Contact Inquiries</h3>
-                                        <div className="h-80">
-                                            <ResponsiveContainer width="100%" height="100%">
-                                                <PieChart>
-                                                    <Pie data={analyticsData.contactsBySubject} cx="50%" cy="50%" outerRadius={80} fill="#8884d8" dataKey="count" nameKey="subject" label>
-                                                        {analyticsData.contactsBySubject.map((entry, index) => (
-                                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                                        ))}
-                                                    </Pie>
-                                                    <Tooltip />
-                                                </PieChart>
-                                            </ResponsiveContainer>
-                                        </div>
+                                </div>
+                                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                                    <h3 className="text-lg font-semibold mb-4">Contact Inquiries</h3>
+                                    <div className="h-80">
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <PieChart>
+                                                <Pie data={analyticsData.contactsBySubject} cx="50%" cy="50%" outerRadius={80} fill="#8884d8" dataKey="count" nameKey="subject" label>
+                                                    {analyticsData.contactsBySubject.map((entry, index) => (
+                                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                                    ))}
+                                                </Pie>
+                                                <Tooltip />
+                                            </PieChart>
+                                        </ResponsiveContainer>
                                     </div>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Contacts Tab */}
-                        {activeTab === 'contacts' && (
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-2xl font-bold text-gray-800">Contact Submissions</h2>
-                                    <Button onClick={() => handleExport('contacts')} variant="outline" size="sm" className="flex items-center gap-2">
-                                        <Download size={16} /> Export CSV
-                                    </Button>
-                                </div>
-                                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left">
-                                            <thead className="bg-gray-50 border-b border-gray-100">
-                                                <tr>
-                                                    <th className="p-4 font-semibold text-gray-600">Name</th>
-                                                    <th className="p-4 font-semibold text-gray-600">Subject</th>
-                                                    <th className="p-4 font-semibold text-gray-600">Message</th>
-                                                    <th className="p-4 font-semibold text-gray-600">Date</th>
+                    {/* Contacts Tab */}
+                    {activeTab === 'contacts' && (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-2xl font-bold text-gray-800">Contact Submissions</h2>
+                                <Button onClick={() => handleExport('contacts')} variant="outline" size="sm" className="flex items-center gap-2">
+                                    <Download size={16} /> Export CSV
+                                </Button>
+                            </div>
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left">
+                                        <thead className="bg-gray-50 border-b border-gray-100">
+                                            <tr>
+                                                <th className="p-4 font-semibold text-gray-600">Name</th>
+                                                <th className="p-4 font-semibold text-gray-600">Subject</th>
+                                                <th className="p-4 font-semibold text-gray-600">Message</th>
+                                                <th className="p-4 font-semibold text-gray-600">Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {contacts.map((c) => (
+                                                <tr key={c.id} className="hover:bg-gray-50">
+                                                    <td className="p-4">
+                                                        <div className="font-medium text-gray-900">{c.firstName} {c.lastName}</div>
+                                                        <div className="text-sm text-gray-500">{c.email}</div>
+                                                    </td>
+                                                    <td className="p-4">{c.subject}</td>
+                                                    <td className="p-4 text-gray-600 max-w-xs truncate">{c.message}</td>
+                                                    <td className="p-4 text-sm text-gray-500">{new Date(c.createdAt).toLocaleDateString()}</td>
                                                 </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-gray-100">
-                                                {contacts.map((c) => (
-                                                    <tr key={c.id} className="hover:bg-gray-50">
-                                                        <td className="p-4">
-                                                            <div className="font-medium text-gray-900">{c.firstName} {c.lastName}</div>
-                                                            <div className="text-sm text-gray-500">{c.email}</div>
-                                                        </td>
-                                                        <td className="p-4">{c.subject}</td>
-                                                        <td className="p-4 text-gray-600 max-w-xs truncate">{c.message}</td>
-                                                        <td className="p-4 text-sm text-gray-500">{new Date(c.createdAt).toLocaleDateString()}</td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Donations Tab */}
-                        {activeTab === 'donations' && (
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-2xl font-bold text-gray-800">Donations</h2>
-                                    <Button onClick={() => handleExport('donations')} variant="outline" size="sm" className="flex items-center gap-2">
-                                        <Download size={16} /> Export CSV
-                                    </Button>
-                                </div>
-                                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    {/* Donations Tab */}
+                    {activeTab === 'donations' && (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-2xl font-bold text-gray-800">Donations</h2>
+                                <Button onClick={() => handleExport('donations')} variant="outline" size="sm" className="flex items-center gap-2">
+                                    <Download size={16} /> Export CSV
+                                </Button>
+                            </div>
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="overflow-x-auto">
                                     <table className="w-full text-left">
                                         <thead className="bg-gray-50 border-b border-gray-100">
                                             <tr>
@@ -421,68 +479,70 @@ const Admin = () => {
                                     </table>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Applications Tab */}
-                        {activeTab === 'applications' && (
-                            <div className="space-y-6">
-                                <h2 className="text-2xl font-bold text-gray-800">Job Applications</h2>
-                                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                                    <div className="overflow-x-auto">
-                                        <table className="w-full text-left">
-                                            <thead className="bg-gray-50 border-b border-gray-100">
-                                                <tr>
-                                                    <th className="p-4 font-semibold text-gray-600">Candidate</th>
-                                                    <th className="p-4 font-semibold text-gray-600">Role</th>
-                                                    <th className="p-4 font-semibold text-gray-600">Status</th>
-                                                    <th className="p-4 font-semibold text-gray-600">Resume</th>
+                    {/* Applications Tab */}
+                    {activeTab === 'applications' && (
+                        <div className="space-y-6">
+                            <h2 className="text-2xl font-bold text-gray-800">Job Applications</h2>
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left">
+                                        <thead className="bg-gray-50 border-b border-gray-100">
+                                            <tr>
+                                                <th className="p-4 font-semibold text-gray-600">Candidate</th>
+                                                <th className="p-4 font-semibold text-gray-600">Role</th>
+                                                <th className="p-4 font-semibold text-gray-600">Status</th>
+                                                <th className="p-4 font-semibold text-gray-600">Resume</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {applications.map((app) => (
+                                                <tr key={app.id} className="hover:bg-gray-50">
+                                                    <td className="p-4">
+                                                        <div className="font-medium text-gray-900">{app.firstName} {app.lastName}</div>
+                                                        <div className="text-sm text-gray-500">{app.email}</div>
+                                                    </td>
+                                                    <td className="p-4">{app.jobTitle || 'Unknown'}</td>
+                                                    <td className="p-4">
+                                                        <select
+                                                            value={app.status || 'Pending'}
+                                                            onChange={(e) => handleStatusChange(app.id, e.target.value)}
+                                                            className="text-sm border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
+                                                        >
+                                                            <option value="Pending">Pending</option>
+                                                            <option value="Reviewed">Reviewed</option>
+                                                            <option value="Interview">Interview</option>
+                                                            <option value="Hired">Hired</option>
+                                                            <option value="Rejected">Rejected</option>
+                                                        </select>
+                                                    </td>
+                                                    <td className="p-4">
+                                                        <a href={`${API_URL}/uploads/${app.resume}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm">
+                                                            Download
+                                                        </a>
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-gray-100">
-                                                {applications.map((app) => (
-                                                    <tr key={app.id} className="hover:bg-gray-50">
-                                                        <td className="p-4">
-                                                            <div className="font-medium text-gray-900">{app.firstName} {app.lastName}</div>
-                                                            <div className="text-sm text-gray-500">{app.email}</div>
-                                                        </td>
-                                                        <td className="p-4">{app.jobTitle || 'Unknown'}</td>
-                                                        <td className="p-4">
-                                                            <select
-                                                                value={app.status || 'Pending'}
-                                                                onChange={(e) => handleStatusChange(app.id, e.target.value)}
-                                                                className="text-sm border-gray-300 rounded-lg focus:ring-primary focus:border-primary"
-                                                            >
-                                                                <option value="Pending">Pending</option>
-                                                                <option value="Reviewed">Reviewed</option>
-                                                                <option value="Interview">Interview</option>
-                                                                <option value="Hired">Hired</option>
-                                                                <option value="Rejected">Rejected</option>
-                                                            </select>
-                                                        </td>
-                                                        <td className="p-4">
-                                                            <a href={`${API_URL}/uploads/${app.resume}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm">
-                                                                Download
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Careers Tab */}
-                        {activeTab === 'careers' && (
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-2xl font-bold text-gray-800">Manage Careers</h2>
-                                    <Button onClick={() => setShowCareerForm(true)} size="sm" className="flex items-center gap-2">
-                                        <Plus size={20} /> Add Job
-                                    </Button>
-                                </div>
-                                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    {/* Careers Tab */}
+                    {activeTab === 'careers' && (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-2xl font-bold text-gray-800">Manage Careers</h2>
+                                <Button onClick={() => setShowCareerForm(true)} size="sm" className="flex items-center gap-2">
+                                    <Plus size={20} /> Add Job
+                                </Button>
+                            </div>
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="overflow-x-auto">
                                     <table className="w-full text-left">
                                         <thead className="bg-gray-50 border-b border-gray-100">
                                             <tr>
@@ -509,18 +569,20 @@ const Admin = () => {
                                     </table>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Programs Tab */}
-                        {activeTab === 'programs' && (
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-2xl font-bold text-gray-800">Manage Programs</h2>
-                                    <Button onClick={() => setShowProgramForm(true)} size="sm" className="flex items-center gap-2">
-                                        <Plus size={20} /> Add Program
-                                    </Button>
-                                </div>
-                                <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                    {/* Programs Tab */}
+                    {activeTab === 'programs' && (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-2xl font-bold text-gray-800">Manage Programs</h2>
+                                <Button onClick={() => setShowProgramForm(true)} size="sm" className="flex items-center gap-2">
+                                    <Plus size={20} /> Add Program
+                                </Button>
+                            </div>
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="overflow-x-auto">
                                     <table className="w-full text-left">
                                         <thead className="bg-gray-50 border-b border-gray-100">
                                             <tr>
@@ -545,50 +607,50 @@ const Admin = () => {
                                     </table>
                                 </div>
                             </div>
-                        )}
+                        </div>
+                    )}
 
-                        {/* Events Tab */}
-                        {activeTab === 'events' && (
-                            <div className="space-y-6">
-                                <div className="flex justify-between items-center">
-                                    <h2 className="text-2xl font-bold text-gray-800">Manage Events</h2>
-                                    <Button onClick={() => setShowAddEventModal(true)} variant="primary" className="flex items-center gap-2">
-                                        <Plus size={20} /> Add Event
-                                    </Button>
-                                </div>
+                    {/* Events Tab */}
+                    {activeTab === 'events' && (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-2xl font-bold text-gray-800">Manage Events</h2>
+                                <Button onClick={() => setShowAddEventModal(true)} variant="primary" className="flex items-center gap-2">
+                                    <Plus size={20} /> Add Event
+                                </Button>
+                            </div>
 
-                                <div className="grid md:grid-cols-2 gap-6">
-                                    {events.map((event) => (
-                                        <div key={event.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
-                                            <div className="flex justify-between items-start mb-4">
-                                                <div>
-                                                    <h3 className="text-xl font-bold text-gray-900">{event.title}</h3>
-                                                    <p className="text-sm text-gray-500">{new Date(event.date).toLocaleDateString()} • {event.location}</p>
-                                                </div>
-                                                <div className={`px-3 py-1 rounded-full text-xs font-bold ${new Date(event.date) > new Date() ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
-                                                    {new Date(event.date) > new Date() ? 'Upcoming' : 'Past'}
-                                                </div>
+                            <div className="grid md:grid-cols-2 gap-6">
+                                {events.map((event) => (
+                                    <div key={event.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div>
+                                                <h3 className="text-xl font-bold text-gray-900">{event.title}</h3>
+                                                <p className="text-sm text-gray-500">{new Date(event.date).toLocaleDateString()} • {event.location}</p>
                                             </div>
-                                            <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
-                                            <div className="mt-auto flex gap-3">
-                                                <Button onClick={() => handleViewRegistrations(event.id)} variant="outline" size="sm" className="flex-1">
-                                                    View Signups
-                                                </Button>
-                                                <button
-                                                    onClick={() => handleDeleteEvent(event.id)}
-                                                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                                >
-                                                    <Trash2 size={20} />
-                                                </button>
+                                            <div className={`px-3 py-1 rounded-full text-xs font-bold ${new Date(event.date) > new Date() ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                                                {new Date(event.date) > new Date() ? 'Upcoming' : 'Past'}
                                             </div>
                                         </div>
-                                    ))}
-                                </div>
+                                        <p className="text-gray-600 mb-4 line-clamp-2">{event.description}</p>
+                                        <div className="mt-auto flex gap-3">
+                                            <Button onClick={() => handleViewRegistrations(event.id)} variant="outline" size="sm" className="flex-1">
+                                                View Signups
+                                            </Button>
+                                            <button
+                                                onClick={() => handleDeleteEvent(event.id)}
+                                                className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                            >
+                                                <Trash2 size={20} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
-            </div>
+            </main>
 
             {/* Modals */}
             {showCareerForm && (
