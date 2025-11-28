@@ -192,9 +192,9 @@ router.get('/analytics', authenticateToken, async (req, res) => {
     try {
         // 1. Applications by Role
         const appsByRoleStmt = db.prepare(`
-            SELECT c.title, COUNT(a.id) as count
-            FROM careers c
-            LEFT JOIN applications a ON c.id = a.jobId
+            SELECT c.title as title, COUNT(a.id) as count
+            FROM applications a
+            JOIN careers c ON a.jobId = c.id
             GROUP BY c.title
         `);
         const appsByRole = await appsByRoleStmt.all();
