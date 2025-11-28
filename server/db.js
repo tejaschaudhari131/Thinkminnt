@@ -56,10 +56,21 @@ const initDatabase = async () => {
     email ${textType},
     phone ${textType},
     resume ${textType},
+    resumeData ${isPostgres ? 'BYTEA' : 'BLOB'},
+    resumeType ${textType},
     coverLetter ${textType},
     status ${textType} DEFAULT 'Pending',
     createdAt ${isPostgres ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP'}
   `));
+
+  // Migration to add columns if they don't exist (for existing production DB)
+  try {
+    await db.exec(`ALTER TABLE applications ADD COLUMN resumeData ${isPostgres ? 'BYTEA' : 'BLOB'}`);
+    await db.exec(`ALTER TABLE applications ADD COLUMN resumeType ${textType}`);
+    console.log('Added resumeData and resumeType columns to applications table');
+  } catch (err) {
+    // Columns likely already exist
+  }
 
   await db.exec(createTable('subscribers', `
     id ${autoIncrement},

@@ -120,6 +120,25 @@ router.get('/donations', authenticateToken, async (req, res) => {
     }
 });
 
+// Serve uploads from Database
+router.get('/uploads/:filename', async (req, res) => {
+    try {
+        const stmt = db.prepare('SELECT resumeData, resumeType FROM applications WHERE resume = ?');
+        const file = await stmt.get(req.params.filename);
+
+        if (file && file.resumeData) {
+            res.setHeader('Content-Type', file.resumeType || 'application/pdf');
+            res.send(file.resumeData);
+        } else {
+            // Fallback for old files or if not found
+            res.status(404).send('File not found');
+        }
+    } catch (error) {
+        console.error('Error serving file:', error);
+        res.status(500).send('Error retrieving file');
+    }
+});
+
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
@@ -128,31 +147,22 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Configure Multer
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadDir = path.join(__dirname, 'uploads');
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir);
-        }
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
+// Configure Multer for Memory Storage (to save to DB)
+const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
 router.post('/apply', upload.single('resume'), async (req, res) => {
     const { jobId, firstName, lastName, email, phone, coverLetter } = req.body;
-    const resume = req.file ? req.file.filename : null;
+    const resume = req.file ? (Date.now() + '-' + req.file.originalname) : null;
+    const resumeData = req.file ? req.file.buffer : null;
+    const resumeType = req.file ? req.file.mimetype : null;
 
     console.log('Received application:', { jobId, firstName, lastName });
 
     try {
-        const stmt = db.prepare('INSERT INTO applications (jobId, firstName, lastName, email, phone, resume, coverLetter) VALUES (?, ?, ?, ?, ?, ?, ?)');
-        const info = await stmt.run(parseInt(jobId), firstName, lastName, email, phone, resume, coverLetter);
+        const stmt = db.prepare('INSERT INTO applications (jobId, firstName, lastName, email, phone, resume, resumeData, resumeType, coverLetter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        const info = await stmt.run(parseInt(jobId), firstName, lastName, email, phone, resume, resumeData, resumeType, coverLetter);
         res.json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
         console.error(error);
