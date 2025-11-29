@@ -13,6 +13,7 @@ import BlogPost from './pages/BlogPost';
 import Team from './pages/Team';
 import Contact from './pages/Contact';
 import GetInvolved from './pages/GetInvolved';
+import Donate from './pages/Donate';
 
 
 import Admin from './pages/Admin';
