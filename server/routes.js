@@ -152,6 +152,17 @@ const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
+import nodemailer from 'nodemailer';
+
+// Configure Email Transporter
+const transporter = nodemailer.createTransport({
+    service: 'gmail', // or your preferred service
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
 router.post('/apply', upload.single('resume'), async (req, res) => {
     const { jobId, firstName, lastName, email, phone, coverLetter } = req.body;
     const resume = req.file ? (Date.now() + '-' + req.file.originalname) : null;
@@ -163,6 +174,27 @@ router.post('/apply', upload.single('resume'), async (req, res) => {
     try {
         const stmt = db.prepare('INSERT INTO applications (jobId, firstName, lastName, email, phone, resume, resumeData, resumeType, coverLetter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
         const info = await stmt.run(parseInt(jobId), firstName, lastName, email, phone, resume, resumeData, resumeType, coverLetter);
+
+        // Send Confirmation Email
+        if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: 'Application Received - ThinkMint Foundation',
+                text: `Dear ${firstName},\n\nThank you for applying to ThinkMint Foundation. We have received your application and will review it shortly.\n\nBest regards,\nThinkMint Foundation Team`
+            };
+
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                    console.error('Error sending email:', error);
+                } else {
+                    console.log('Email sent:', info.response);
+                }
+            });
+        } else {
+            console.log('Email credentials not found, skipping email.');
+        }
+
         res.json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
         console.error(error);
