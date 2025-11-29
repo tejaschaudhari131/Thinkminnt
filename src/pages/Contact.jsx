@@ -5,7 +5,6 @@ import Button from '../components/Button';
 import PageTransition from '../components/PageTransition';
 import SEO from '../components/SEO';
 import API_URL from '../config/api';
-import emailjs from '@emailjs/browser';
 
 const Contact = () => {
     const contactSchema = {
@@ -126,6 +125,49 @@ const Contact = () => {
                                                 <p className="text-gray-400">+91 93721 95870 (Aditya Joshi)</p>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+
+                            {/* Contact Form */}
+                            <motion.div
+                                initial={{ opacity: 0, x: 30 }}
+                                whileInView={{ opacity: 1, x: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.6 }}
+                                className="bg-white rounded-[2.5rem] p-10 md:p-14 shadow-xl border border-gray-100"
+                            >
+                                <form className="space-y-6" onSubmit={async (e) => {
+                                    e.preventDefault();
+                                    const formData = {
+                                        firstName: e.target.firstName.value,
+                                        lastName: e.target.lastName.value,
+                                        email: e.target.email.value,
+                                        subject: e.target.subject.value,
+                                        message: e.target.message.value
+                                    };
+                                    try {
+                                        const response = await fetch(`${API_URL}/api/contact`, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify(formData)
+                                        });
+                                        if (response.ok) {
+                                            alert('Message sent successfully!');
+                                            e.target.reset();
+                                        } else {
+                                            alert('Failed to send message.');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error:', error);
+                                        alert('An error occurred.');
+                                    }
+                                }}>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label htmlFor="firstName" className="block text-sm font-bold text-gray-700 mb-2">First Name</label>
+                                            <input type="text" id="firstName" required className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-medium" placeholder="John" />
+                                        </div>
                                         <div>
                                             <label htmlFor="lastName" className="block text-sm font-bold text-gray-700 mb-2">Last Name</label>
                                             <input type="text" id="lastName" required className="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-medium" placeholder="Doe" />
@@ -165,8 +207,8 @@ const Contact = () => {
                         </div>
                     </div>
                 </section>
-            </div >
-        </PageTransition >
+            </div>
+        </PageTransition>
     );
 };
 
