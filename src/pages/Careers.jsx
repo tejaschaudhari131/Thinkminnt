@@ -53,13 +53,13 @@ const Careers = () => {
                 try {
                     await emailjs.send(
                         'service_p4pdmm9',      // Service ID (Brevo)
-                        'template_fz4ilec',     // Template ID
+                        'template_bcwrx2r',     // Template ID
                         {
                             to_name: applicantName,
                             to_email: applicantEmail,
                             reply_to: 'no-reply@thinkminnt.com'
                         },
-                        'qRZtc-fVH8EKcPjYC'      // Public Key
+                        'Q50KacLeY8z0yfCN4'      // Public Key
                     );
                     console.log('Email sent successfully via EmailJS');
                 } catch (emailError) {

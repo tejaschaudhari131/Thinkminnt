@@ -151,14 +151,14 @@ const Contact = () => {
                                         // Send to Admin via EmailJS
                                         await emailjs.send(
                                             'service_p4pdmm9',      // Service ID (Brevo)
-                                            'template_fz4ilec',     // Template ID
+                                            'template_bcwrx2r',     // Template ID
                                             {
                                                 to_name: 'Admin',
                                                 to_email: 'tejaschaudhari131@gmail.com', // Send to Admin
                                                 reply_to: formData.email,
                                                 message: `New Contact Form Submission:\n\nName: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\nSubject: ${formData.subject}\nMessage: ${formData.message}`
                                             },
-                                            'qRZtc-fVH8EKcPjYC'      // Public Key
+                                            'Q50KacLeY8z0yfCN4'      // Public Key
                                         );
                                         alert('Message sent successfully!');
                                         e.target.reset();
