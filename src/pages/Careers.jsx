@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import PageTransition from '../components/PageTransition';
 import SEO from '../components/SEO';
 import API_URL from '../config/api';
+import emailjs from '@emailjs/browser';
 
 const Careers = () => {
     const [jobs, setJobs] = useState([]);
@@ -37,17 +38,39 @@ const Careers = () => {
         const formData = new FormData(e.target);
         formData.append('jobId', selectedJob.id);
 
+        const applicantName = e.target.firstName.value;
+        const applicantEmail = e.target.email.value;
+
         try {
             const response = await fetch(`${API_URL}/api/apply`, {
                 method: 'POST',
                 body: formData
             });
+            const data = await response.json();
 
-            if (response.ok) {
+            if (data.success) {
+                // Send Email via EmailJS
+                try {
+                    await emailjs.send(
+                        'service_mao2bzd',      // Service ID
+                        'template_bcwrx2r',     // Template ID
+                        {
+                            to_name: applicantName,
+                            to_email: applicantEmail,
+                            reply_to: 'tejaschaudhari131@gmail.com'
+                        },
+                        'Q50KacLeY8z0yfCN4'      // Public Key
+                    );
+                    console.log('Email sent successfully via EmailJS');
+                } catch (emailError) {
+                    console.error('EmailJS Error:', emailError);
+                }
+
                 setApplicationStatus('success');
+                e.target.reset();
                 setTimeout(() => {
-                    setSelectedJob(null);
                     setApplicationStatus('idle');
+                    setSelectedJob(null);
                 }, 3000);
             } else {
                 throw new Error('Failed to submit application');
@@ -68,7 +91,7 @@ const Careers = () => {
             "name": "ThinkMinnt Foundation",
             "value": job.id
         },
-        "datePosted": new Date().toISOString().split('T')[0], // Assuming posted today for now, ideally should come from DB
+        "datePosted": new Date().toISOString().split('T')[0],
         "validThrough": new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
         "employmentType": job.type === "Full-time" ? "FULL_TIME" : "PART_TIME",
         "hiringOrganization": {
@@ -93,7 +116,7 @@ const Careers = () => {
             "currency": "INR",
             "value": {
                 "@type": "QuantitativeValue",
-                "value": 0, // Replace with actual salary if available
+                "value": 0,
                 "unitText": "MONTH"
             }
         }
