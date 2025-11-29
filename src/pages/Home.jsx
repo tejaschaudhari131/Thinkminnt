@@ -91,7 +91,7 @@ const Home = () => {
                                 initial="hidden"
                                 animate="visible"
                                 variants={staggerContainer}
-                                className="max-w-3xl pt-12 md:pt-0"
+                                className="max-w-4xl pt-12 md:pt-0"
                             >
                                 <motion.div variants={fadeInUp} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 text-accent font-semibold text-sm mb-6 md:mb-8 border border-white/10 backdrop-blur-md">
                                     <Sparkles size={16} />
@@ -104,15 +104,15 @@ const Home = () => {
                                 <motion.p variants={fadeInUp} className="text-lg md:text-2xl text-gray-200 mb-8 md:mb-10 leading-relaxed max-w-lg font-light">
                                     Empowering students in <span className="text-white font-medium">MINT</span> (Math, Informatics, Natural Sciences, Tech) through innovation and community.
                                 </motion.p>
-                                <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-4 sm:gap-5">
-                                    <Button to="/programs" variant="primary" size="lg" icon={ArrowRight} className="shadow-glow w-full sm:w-auto justify-center">
-                                        Our Programs
-                                    </Button>
-                                    <Button to="/get-involved" variant="secondary" size="lg" className="shadow-glow w-full sm:w-auto justify-center text-primary-dark font-bold">
+                                <motion.div variants={fadeInUp} className="flex flex-wrap gap-4">
+                                    <Button to="/get-involved" variant="secondary" size="lg" className="shadow-glow flex-1 sm:flex-none justify-center text-primary-dark font-bold min-w-[160px]">
                                         Get Involved
                                     </Button>
-                                    <Button to="/donate" variant="outline" size="lg" className="border-white/30 hover:bg-white/10 w-full sm:w-auto justify-center">
-                                        Make a Donation
+                                    <Button to="/donate" variant="accent" size="lg" className="shadow-glow flex-1 sm:flex-none justify-center text-primary-dark font-bold min-w-[160px]">
+                                        Donate Now
+                                    </Button>
+                                    <Button to="/programs" variant="outline" size="lg" icon={ArrowRight} className="border-white/30 hover:bg-white/10 flex-1 sm:flex-none justify-center min-w-[160px]">
+                                        Our Programs
                                     </Button>
                                 </motion.div>
                             </motion.div>
