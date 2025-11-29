@@ -119,6 +119,24 @@ const Admin = () => {
         }
     };
 
+    const handleDeleteApplication = async (id) => {
+        if (!window.confirm('Are you sure you want to delete this application?')) return;
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/api/applications/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                setApplications(applications.filter(app => app.id !== id));
+            }
+        } catch (error) {
+            console.error('Error deleting application:', error);
+        }
+    };
+
     const handleExport = async (type) => {
         try {
             const token = localStorage.getItem('token');
@@ -495,6 +513,7 @@ const Admin = () => {
                                                 <th className="p-4 font-semibold text-gray-600">Role</th>
                                                 <th className="p-4 font-semibold text-gray-600">Status</th>
                                                 <th className="p-4 font-semibold text-gray-600">Resume</th>
+                                                <th className="p-4 font-semibold text-gray-600">Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-100">
@@ -522,6 +541,11 @@ const Admin = () => {
                                                         <a href={`${API_URL}/api/uploads/${app.resume}`} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline text-sm">
                                                             Download
                                                         </a>
+                                                    </td>
+                                                    <td className="p-4">
+                                                        <button onClick={() => handleDeleteApplication(app.id)} className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition-colors" title="Delete Application">
+                                                            <Trash2 size={18} />
+                                                        </button>
                                                     </td>
                                                 </tr>
                                             ))}

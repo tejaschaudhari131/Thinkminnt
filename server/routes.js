@@ -322,6 +322,17 @@ router.put('/applications/:id/status', authenticateToken, async (req, res) => {
     }
 });
 
+router.delete('/applications/:id', authenticateToken, async (req, res) => {
+    try {
+        const stmt = db.prepare('DELETE FROM applications WHERE id = ?');
+        const info = await stmt.run(req.params.id);
+        res.json({ success: true, changes: info.changes });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 router.get('/export/contacts', authenticateToken, async (req, res) => {
     try {
         const stmt = db.prepare('SELECT * FROM contacts ORDER BY createdAt DESC');
