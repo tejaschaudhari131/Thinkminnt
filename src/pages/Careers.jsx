@@ -58,12 +58,54 @@ const Careers = () => {
         }
     };
 
+    const jobSchema = jobs.map(job => ({
+        "@context": "https://schema.org/",
+        "@type": "JobPosting",
+        "title": job.title,
+        "description": job.description,
+        "identifier": {
+            "@type": "PropertyValue",
+            "name": "ThinkMinnt Foundation",
+            "value": job.id
+        },
+        "datePosted": new Date().toISOString().split('T')[0], // Assuming posted today for now, ideally should come from DB
+        "validThrough": new Date(new Date().setMonth(new Date().getMonth() + 1)).toISOString(),
+        "employmentType": job.type === "Full-time" ? "FULL_TIME" : "PART_TIME",
+        "hiringOrganization": {
+            "@type": "Organization",
+            "name": "ThinkMinnt Foundation",
+            "sameAs": "https://thinkminnt.com",
+            "logo": "https://thinkminnt.com/logo.jpg"
+        },
+        "jobLocation": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "S No. 89/1, 89/2, Shop No. Namo Developers, Mohamadwadi",
+                "addressLocality": "Pune",
+                "addressRegion": "MH",
+                "postalCode": "411060",
+                "addressCountry": "IN"
+            }
+        },
+        "baseSalary": {
+            "@type": "MonetaryAmount",
+            "currency": "INR",
+            "value": {
+                "@type": "QuantitativeValue",
+                "value": 0, // Replace with actual salary if available
+                "unitText": "MONTH"
+            }
+        }
+    }));
+
     return (
         <PageTransition>
             <SEO
                 title="Join Our Team - Careers"
                 description="Be a part of the change. Explore career opportunities at ThinkMinnt Foundation and help us build a better future."
                 keywords="Careers, Jobs, NGO Jobs, Social Impact Careers, Volunteer, Pune"
+                schema={jobSchema}
             />
             <div className="flex flex-col">
                 {/* Hero Section */}
