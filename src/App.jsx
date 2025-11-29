@@ -14,6 +14,7 @@ import Team from './pages/Team';
 import Contact from './pages/Contact';
 import GetInvolved from './pages/GetInvolved';
 import Donate from './pages/Donate';
+import NotFound from './pages/NotFound';
 
 
 import Admin from './pages/Admin';
@@ -58,7 +59,9 @@ const AnimatedRoutes = () => {
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
+
         <Route path="/login" element={<Login />} />
+        <Route path="*" element={<NotFound />} />
         <Route path="/admin" element={
           <ProtectedRoute>
             <Admin />
@@ -71,6 +74,8 @@ const AnimatedRoutes = () => {
 
 import ChatBot from './components/ChatBot';
 
+import CookieBanner from './components/CookieBanner';
+
 function App() {
   return (
     <ThemeProvider>
@@ -78,6 +83,7 @@ function App() {
         <ScrollToTop />
         <Cursor />
         <ChatBot />
+        <CookieBanner />
         <Layout>
           <AnimatedRoutes />
         </Layout>
