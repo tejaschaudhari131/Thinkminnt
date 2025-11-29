@@ -1,13 +1,13 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, ArrowRight, Heart, Brain } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
 import Newsletter from './Newsletter';
-// Removed logo import
 
 const Footer = () => {
     return (
         <footer className="bg-neutral-900 text-white pt-20 pb-10 relative overflow-hidden">
-            {/* ... (Background Pattern) */}
+            {/* Background Pattern */}
             <div className="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none">
                 <div className="absolute -top-24 -right-24 w-96 h-96 bg-accent rounded-full blur-3xl"></div>
                 <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-primary rounded-full blur-3xl"></div>
@@ -30,8 +30,13 @@ const Footer = () => {
                             <p>Licence No: 162020</p>
                         </div>
                         <div className="flex space-x-4 pt-2">
-                            {[Facebook, Twitter, Instagram, Linkedin].map((Icon, index) => (
-                                <a key={index} href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 transform hover:-translate-y-1 border border-white/10">
+                            {[
+                                { Icon: Facebook, href: "#" },
+                                { Icon: Twitter, href: "#" },
+                                { Icon: Instagram, href: "#" },
+                                { Icon: Linkedin, href: "https://www.linkedin.com/company/thinkminnt-foundation/" }
+                            ].map(({ Icon, href }, index) => (
+                                <a key={index} href={href} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-primary hover:text-white transition-all duration-300 transform hover:-translate-y-1 border border-white/10">
                                     <Icon size={18} />
                                 </a>
                             ))}

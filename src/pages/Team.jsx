@@ -11,7 +11,7 @@ const boardMembers = [
         role: "Director",
         bio: "Dedicated to steering the foundation towards its mission of sustainable development and social equity.",
         image: "/assets/tejaram_chaudhari.jpg",
-        social: { linkedin: "#", twitter: "#" }
+        social: { linkedin: "https://www.linkedin.com/in/tejaramchaudhari/", twitter: "#" }
     },
     {
         id: 2,
@@ -19,7 +19,7 @@ const boardMembers = [
         role: "Director",
         bio: "Passionate about leveraging community engagement to drive impactful change.",
         image: "/assets/aditya_joshi.jpg",
-        social: { linkedin: "#", twitter: "#" }
+        social: { linkedin: "https://www.linkedin.com/in/adityajoshi8/", twitter: "#" }
     }
 ];
 
