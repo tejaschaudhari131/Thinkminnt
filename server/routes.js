@@ -123,7 +123,7 @@ router.get('/donations', authenticateToken, async (req, res) => {
 // Serve uploads from Database
 router.get('/uploads/:filename', async (req, res) => {
     try {
-        const stmt = db.prepare('SELECT resumeData, resumeType FROM applications WHERE resume = ?');
+        const stmt = db.prepare('SELECT resumeData as "resumeData", resumeType as "resumeType" FROM applications WHERE resume = ?');
         const file = await stmt.get(req.params.filename);
 
         if (file && file.resumeData) {
