@@ -307,6 +307,11 @@ const Careers = () => {
                                                 <textarea name="coverLetter" rows="4" className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"></textarea>
                                             </div>
 
+                                            {applicationStatus === 'error' && (
+                                                <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+                                                    Something went wrong. Please try again or contact us directly.
+                                                </div>
+                                            )}
                                             <Button type="submit" disabled={applicationStatus === 'submitting'} className="w-full">
                                                 {applicationStatus === 'submitting' ? 'Submitting...' : 'Submit Application'}
                                             </Button>
