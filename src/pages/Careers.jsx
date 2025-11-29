@@ -52,7 +52,7 @@ const Careers = () => {
                 // Send Email via EmailJS
                 try {
                     await emailjs.send(
-                        'service_4eg277e',      // Service ID
+                        'service_p4pdmm9',      // Service ID (Brevo)
                         'template_fz4ilec',     // Template ID
                         {
                             to_name: applicantName,
