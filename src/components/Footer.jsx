@@ -85,9 +85,9 @@ const Footer = () => {
                 <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-500 text-xs">
                     <p>&copy; {new Date().getFullYear()} ThinkMinnt Foundation. All rights reserved.</p>
                     <div className="flex gap-6">
-                        <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-                        <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-                        <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+                        <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                        <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+                        <Link to="/refund-policy" className="hover:text-white transition-colors">Refund Policy</Link>
                     </div>
                 </div>
             </div>

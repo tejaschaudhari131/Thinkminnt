@@ -17,6 +17,9 @@ import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Careers from './pages/Careers';
 import Impact from './pages/Impact';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Terms from './pages/Terms';
+import RefundPolicy from './pages/RefundPolicy';
 import ScrollToTop from './components/ScrollToTop';
 import Cursor from './components/Cursor';
 import { ThemeProvider } from './context/ThemeContext';
@@ -49,6 +52,9 @@ const AnimatedRoutes = () => {
         <Route path="/impact" element={<Impact />} />
         <Route path="/donate" element={<Donate />} />
         <Route path="/get-involved" element={<Donate />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={
           <ProtectedRoute>
