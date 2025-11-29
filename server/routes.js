@@ -177,6 +177,7 @@ router.post('/apply', upload.single('resume'), async (req, res) => {
 
         // Send Confirmation Email
         if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+            console.log(`Attempting to send email to ${email} using ${process.env.EMAIL_USER}`);
             const mailOptions = {
                 from: process.env.EMAIL_USER,
                 to: email,
@@ -184,20 +185,20 @@ router.post('/apply', upload.single('resume'), async (req, res) => {
                 text: `Dear ${firstName},\n\nThank you for applying to ThinkMint Foundation. We have received your application and will review it shortly.\n\nBest regards,\nThinkMint Foundation Team`
             };
 
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                    console.error('Error sending email:', error);
-                } else {
-                    console.log('Email sent:', info.response);
-                }
-            });
+            try {
+                const info = await transporter.sendMail(mailOptions);
+                console.log('Email sent successfully:', info.response);
+            } catch (emailError) {
+                console.error('FAILED to send email:', emailError);
+                // Don't fail the request if email fails, just log it
+            }
         } else {
-            console.log('Email credentials not found, skipping email.');
+            console.log('Email credentials (EMAIL_USER/EMAIL_PASS) not found in environment variables. Skipping email.');
         }
 
         res.json({ success: true, id: info.lastInsertRowid });
     } catch (error) {
-        console.error(error);
+        console.error('Error processing application:', error);
         res.status(500).json({ success: false, error: error.message });
     }
 });
