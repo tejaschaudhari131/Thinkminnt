@@ -156,15 +156,22 @@ import nodemailer from 'nodemailer';
 
 // Configure Email Transporter
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // use STARTTLS
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    connectionTimeout: 10000, // 10 seconds
-    greetingTimeout: 10000
+    logger: true,
+    debug: true
+});
+
+// Verify connection configuration
+transporter.verify(function (error, success) {
+    if (error) {
+        console.log('SMTP Connection Error:', error);
+    } else {
+        console.log('SMTP Server is ready to take our messages');
+    }
 });
 
 router.post('/apply', upload.single('resume'), async (req, res) => {
