@@ -12,7 +12,9 @@ import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import Team from './pages/Team';
 import Contact from './pages/Contact';
-import Donate from './pages/Donate';
+import GetInvolved from './pages/GetInvolved';
+
+
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Careers from './pages/Careers';
@@ -51,7 +53,7 @@ const AnimatedRoutes = () => {
         <Route path="/careers" element={<Careers />} />
         <Route path="/impact" element={<Impact />} />
         <Route path="/donate" element={<Donate />} />
-        <Route path="/get-involved" element={<Donate />} />
+        <Route path="/get-involved" element={<GetInvolved />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/refund-policy" element={<RefundPolicy />} />
