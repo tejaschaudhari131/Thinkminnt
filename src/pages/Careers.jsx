@@ -52,14 +52,14 @@ const Careers = () => {
                 // Send Email via EmailJS
                 try {
                     await emailjs.send(
-                        'service_mao2bzd',      // Service ID
-                        'template_bcwrx2r',     // Template ID
+                        'service_4eg277e',      // Service ID
+                        'template_fz4ilec',     // Template ID
                         {
                             to_name: applicantName,
                             to_email: applicantEmail,
-                            reply_to: 'tejaschaudhari131@gmail.com'
+                            reply_to: 'no-reply@thinkminnt.com'
                         },
-                        'Q50KacLeY8z0yfCN4'      // Public Key
+                        'qRZtc-fVH8EKcPjYC'      // Public Key
                     );
                     console.log('Email sent successfully via EmailJS');
                 } catch (emailError) {
