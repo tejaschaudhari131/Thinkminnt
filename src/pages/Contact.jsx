@@ -5,6 +5,7 @@ import Button from '../components/Button';
 import PageTransition from '../components/PageTransition';
 import SEO from '../components/SEO';
 import API_URL from '../config/api';
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
     const contactSchema = {
@@ -147,20 +148,23 @@ const Contact = () => {
                                         message: e.target.message.value
                                     };
                                     try {
-                                        const response = await fetch(`${API_URL}/api/contact`, {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify(formData)
-                                        });
-                                        if (response.ok) {
-                                            alert('Message sent successfully!');
-                                            e.target.reset();
-                                        } else {
-                                            alert('Failed to send message.');
-                                        }
+                                        // Send to Admin via EmailJS
+                                        await emailjs.send(
+                                            'service_p4pdmm9',      // Service ID (Brevo)
+                                            'template_fz4ilec',     // Template ID
+                                            {
+                                                to_name: 'Admin',
+                                                to_email: 'tejaschaudhari131@gmail.com', // Send to Admin
+                                                reply_to: formData.email,
+                                                message: `New Contact Form Submission:\n\nName: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\nSubject: ${formData.subject}\nMessage: ${formData.message}`
+                                            },
+                                            'qRZtc-fVH8EKcPjYC'      // Public Key
+                                        );
+                                        alert('Message sent successfully!');
+                                        e.target.reset();
                                     } catch (error) {
                                         console.error('Error:', error);
-                                        alert('An error occurred.');
+                                        alert('Failed to send message. Please try again.');
                                     }
                                 }}>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
