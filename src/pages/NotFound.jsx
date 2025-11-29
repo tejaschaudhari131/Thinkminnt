@@ -34,7 +34,7 @@ const NotFound = () => {
                         <Button to="/" variant="primary" size="lg" icon={Home} className="shadow-lg shadow-primary/20">
                             Back to Home
                         </Button>
-                        <Button onClick={() => window.history.back()} variant="outline" size="lg" icon={ArrowLeft}>
+                        <Button onClick={() => window.history.back()} variant="secondary" size="lg" icon={ArrowLeft} className="text-primary-dark">
                             Go Back
                         </Button>
                     </div>
