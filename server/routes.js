@@ -153,6 +153,25 @@ router.get('/uploads/:filename', async (req, res) => {
 
 
 
+
+router.post('/apply', upload.single('resume'), async (req, res) => {
+    const { jobId, firstName, lastName, email, phone, coverLetter } = req.body;
+    const resume = req.file ? (Date.now() + '-' + req.file.originalname) : null;
+    const resumeData = req.file ? req.file.buffer : null;
+    const resumeType = req.file ? req.file.mimetype : null;
+
+    console.log('Received application:', { jobId, firstName, lastName });
+
+    try {
+        const stmt = db.prepare('INSERT INTO applications (jobId, firstName, lastName, email, phone, resume, resumeData, resumeType, coverLetter) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        const info = await stmt.run(parseInt(jobId), firstName, lastName, email, phone, resume, resumeData, resumeType, coverLetter);
+        res.json({ success: true, id: info.lastInsertRowid });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 router.get('/applications', authenticateToken, async (req, res) => {
     try {
         const stmt = db.prepare(`
