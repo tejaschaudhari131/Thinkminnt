@@ -68,7 +68,7 @@ const PrivacyPolicy = () => {
                         <section>
                             <h2 className="text-xl font-bold text-gray-900 mb-4">5. Contact Us</h2>
                             <p>
-                                If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:tejaschaudhari131@gmail.com" className="text-primary hover:underline">tejaschaudhari131@gmail.com</a>
+                                If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:contact-us@thinkminnt.com" className="text-primary hover:underline">contact-us@thinkminnt.com</a>
                             </p>
                         </section>
                     </div>

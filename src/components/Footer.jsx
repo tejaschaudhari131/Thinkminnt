@@ -78,7 +78,7 @@ const Footer = () => {
                                 <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center flex-shrink-0 text-secondary group-hover:bg-secondary group-hover:text-white transition-colors duration-300">
                                     <Mail size={14} />
                                 </div>
-                                <span className="text-sm">tejaschaudhari131@gmail.com</span>
+                                <span className="text-sm">contact-us@thinkminnt.com</span>
                             </li>
                         </ul>
                     </div>

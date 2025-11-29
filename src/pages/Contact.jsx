@@ -94,39 +94,12 @@ const Contact = () => {
                                     </p>
 
                                     <div className="space-y-10">
-                                        <div className="flex items-start gap-6 group">
-                                            <div className="bg-white/10 p-4 rounded-2xl text-secondary group-hover:bg-secondary group-hover:text-white transition-colors duration-300 border border-white/10">
-                                                <MapPin size={28} />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-bold text-white text-xl mb-2">Visit Us</h3>
-                                                <p className="text-gray-400 leading-relaxed">S No. 89/1, 89/2, Shop No. Namo Developers,<br />Mohamadwadi, Pune City, Pune – 411060</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-start gap-6 group">
-                                            <div className="bg-white/10 p-4 rounded-2xl text-secondary group-hover:bg-secondary group-hover:text-white transition-colors duration-300 border border-white/10">
-                                                <Mail size={28} />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-bold text-white text-xl mb-2">Email Us</h3>
-                                                <p className="text-gray-400">tejaschaudhari131@gmail.com</p>
-                                                <p className="text-gray-400">adityajoshi020503@gmail.com</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-start gap-6 group">
-                                            <div className="bg-white/10 p-4 rounded-2xl text-secondary group-hover:bg-secondary group-hover:text-white transition-colors duration-300 border border-white/10">
-                                                <Phone size={28} />
-                                            </div>
-                                            <div>
-                                                <h3 className="font-bold text-white text-xl mb-2">Call Us</h3>
-                                                <p className="text-gray-400">+91 91393 92550 (Tejaram Choudhari)</p>
-                                                <p className="text-gray-400">+91 93721 95870 (Aditya Joshi)</p>
-                                            </div>
-                                        </div>
+                                        <h3 className="font-bold text-white text-xl mb-2">Call Us</h3>
+                                        <p className="text-gray-400">+91 91393 92550 (Tejaram Choudhari)</p>
+                                        <p className="text-gray-400">+91 93721 95870 (Aditya Joshi)</p>
                                     </div>
                                 </div>
+
                             </motion.div>
 
                             {/* Contact Form */}
@@ -206,9 +179,9 @@ const Contact = () => {
                             </motion.div>
                         </div>
                     </div>
-                </section>
-            </div>
-        </PageTransition>
+                </section >
+            </div >
+        </PageTransition >
     );
 };
 

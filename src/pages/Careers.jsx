@@ -57,7 +57,7 @@ const Careers = () => {
                         {
                             to_name: applicantName,
                             to_email: applicantEmail,
-                            reply_to: 'tejaschaudhari131@gmail.com'
+                            reply_to: 'careers@thinkminnt.com'
                         },
                         'Q50KacLeY8z0yfCN4'      // Public Key
                     );

@@ -5,8 +5,8 @@ const data = {
     user_id: 'Q50KacLeY8z0yfCN4',
     template_params: {
         to_name: 'ThinkMinnt Admin',
-        to_email: 'tejaschaudhari131@gmail.com',
-        reply_to: 'tejaschaudhari131@gmail.com'
+        to_email: 'contact-us@thinkminnt.com',
+        reply_to: 'contact-us@thinkminnt.com'
     }
 };
 

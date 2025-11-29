@@ -66,7 +66,7 @@ const RefundPolicy = () => {
                                 Contact Us
                             </h2>
                             <p>
-                                Please email your refund request to: <a href="mailto:tejaschaudhari131@gmail.com" className="text-primary hover:underline">tejaschaudhari131@gmail.com</a>
+                                Please email your refund request to: <a href="mailto:contact-us@thinkminnt.com" className="text-primary hover:underline">contact-us@thinkminnt.com</a>
                             </p>
                             <p>
                                 We will review your request and process approved refunds within 7-10 business days.
