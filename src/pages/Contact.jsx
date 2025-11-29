@@ -86,7 +86,7 @@ const Contact = () => {
                             initial={{ opacity: 0, y: -20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1, duration: 0.6 }}
-                            className="text-4xl md:text-6xl font-bold font-heading mb-6"
+                            className="text-4xl md:text-6xl font-bold font-heading mb-6 text-white"
                         >
                             Let's Start a <span className="text-secondary">Conversation</span>
                         </motion.h1>
