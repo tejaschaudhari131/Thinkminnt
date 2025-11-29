@@ -108,6 +108,9 @@ const Home = () => {
                                     <Button to="/programs" variant="primary" size="lg" icon={ArrowRight} className="shadow-glow w-full sm:w-auto justify-center">
                                         Our Programs
                                     </Button>
+                                    <Button to="/get-involved" variant="secondary" size="lg" className="shadow-glow w-full sm:w-auto justify-center text-primary-dark font-bold">
+                                        Get Involved
+                                    </Button>
                                     <Button to="/donate" variant="outline" size="lg" className="border-white/30 hover:bg-white/10 w-full sm:w-auto justify-center">
                                         Make a Donation
                                     </Button>
