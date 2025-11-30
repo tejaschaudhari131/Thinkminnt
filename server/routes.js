@@ -599,4 +599,52 @@ router.delete('/programs/:id', authenticateToken, async (req, res) => {
     }
 });
 
+// Blog Management
+router.get('/posts', async (req, res) => {
+    try {
+        const stmt = db.prepare('SELECT * FROM posts ORDER BY createdAt DESC');
+        const posts = await stmt.all();
+        res.json(posts);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.post('/posts', authenticateToken, async (req, res) => {
+    const { title, excerpt, content, author, category, image, readTime } = req.body;
+    try {
+        const stmt = db.prepare('INSERT INTO posts (title, excerpt, content, author, category, image, readTime) VALUES (?, ?, ?, ?, ?, ?, ?)');
+        const info = await stmt.run(title, excerpt, content, author, category, image, readTime);
+        res.json({ success: true, id: info.lastInsertRowid });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.delete('/posts/:id', authenticateToken, async (req, res) => {
+    const { id } = req.params;
+    try {
+        const stmt = db.prepare('DELETE FROM posts WHERE id = ?');
+        const info = await stmt.run(id);
+        res.json({ success: true, changes: info.changes });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+// Newsletter Subscribers Management
+router.get('/subscribers', authenticateToken, async (req, res) => {
+    try {
+        const stmt = db.prepare('SELECT * FROM subscribers ORDER BY createdAt DESC');
+        const subscribers = await stmt.all();
+        res.json(subscribers);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
 export default router;

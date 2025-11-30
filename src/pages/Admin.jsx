@@ -15,7 +15,9 @@ import {
     Trash2,
     X,
     LogOut,
-    Menu
+    Menu,
+    Newspaper,
+    Mail
 } from 'lucide-react';
 import API_URL from '../config/api';
 
@@ -32,6 +34,8 @@ const Admin = () => {
     const [careers, setCareers] = useState([]);
     const [programs, setPrograms] = useState([]);
     const [events, setEvents] = useState([]);
+    const [posts, setPosts] = useState([]);
+    const [subscribers, setSubscribers] = useState([]);
     const [eventRegistrations, setEventRegistrations] = useState({});
     const [analyticsData, setAnalyticsData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -40,11 +44,13 @@ const Admin = () => {
     const [newCareer, setNewCareer] = useState({ title: '', department: '', location: '', type: 'Full-time', description: '', requirements: '' });
     const [newProgram, setNewProgram] = useState({ title: '', category: '', description: '', icon: 'Code' });
     const [newEvent, setNewEvent] = useState({ title: '', date: '', location: '', description: '', image: '' });
+    const [newPost, setNewPost] = useState({ title: '', excerpt: '', content: '', author: '', category: 'General', image: '', readTime: '5 min read' });
 
     // Modal States
     const [showCareerForm, setShowCareerForm] = useState(false);
     const [showProgramForm, setShowProgramForm] = useState(false);
     const [showAddEventModal, setShowAddEventModal] = useState(false);
+    const [showPostForm, setShowPostForm] = useState(false);
     const [showRegistrationsModal, setShowRegistrationsModal] = useState(false);
     const [selectedEventId, setSelectedEventId] = useState(null);
 
@@ -63,14 +69,18 @@ const Admin = () => {
 
         try {
             const headers = { 'Authorization': `Bearer ${token}` };
-            const [contactsRes, donationsRes, applicationsRes, analyticsRes, careersRes, programsRes, eventsRes] = await Promise.all([
+            const [contactsRes, donationsRes, applicationsRes, analyticsRes, careersRes, programsRes, eventsRes, postsRes, subscribersRes] = await Promise.all([
                 fetch(`${API_URL}/api/contacts`, { headers }),
                 fetch(`${API_URL}/api/donations`, { headers }),
                 fetch(`${API_URL}/api/applications`, { headers }),
                 fetch(`${API_URL}/api/analytics`, { headers }),
                 fetch(`${API_URL}/api/careers`),
                 fetch(`${API_URL}/api/programs`),
-                fetch(`${API_URL}/api/events`)
+                fetch(`${API_URL}/api/careers`),
+                fetch(`${API_URL}/api/programs`),
+                fetch(`${API_URL}/api/events`),
+                fetch(`${API_URL}/api/posts`),
+                fetch(`${API_URL}/api/subscribers`, { headers })
             ]);
 
             if (contactsRes.status === 401) {
@@ -86,6 +96,8 @@ const Admin = () => {
             setCareers(careersRes.ok ? await careersRes.json() : []);
             setPrograms(programsRes.ok ? await programsRes.json() : []);
             setEvents(eventsRes.ok ? await eventsRes.json() : []);
+            setPosts(postsRes.ok ? await postsRes.json() : []);
+            setSubscribers(subscribersRes.ok ? await subscribersRes.json() : []);
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
@@ -262,6 +274,40 @@ const Admin = () => {
         }
     };
 
+    const handleAddPost = async (e) => {
+        e.preventDefault();
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/api/posts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify(newPost)
+            });
+            if (response.ok) {
+                const resData = await response.json();
+                setPosts([{ ...newPost, id: resData.id }, ...posts]);
+                setNewPost({ title: '', excerpt: '', content: '', author: '', category: 'General', image: '', readTime: '5 min read' });
+                setShowPostForm(false);
+            }
+        } catch (error) {
+            console.error('Error adding post:', error);
+        }
+    };
+
+    const handleDeletePost = async (id) => {
+        if (!window.confirm('Are you sure?')) return;
+        try {
+            const token = localStorage.getItem('token');
+            await fetch(`${API_URL}/api/posts/${id}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            setPosts(posts.filter(p => p.id !== id));
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
+    };
+
     const handleViewRegistrations = async (eventId) => {
         setSelectedEventId(eventId);
         setShowRegistrationsModal(true);
@@ -289,6 +335,8 @@ const Admin = () => {
         { id: 'careers', label: 'Manage Careers', icon: Briefcase },
         { id: 'programs', label: 'Manage Programs', icon: GraduationCap },
         { id: 'events', label: 'Manage Events', icon: Calendar },
+        { id: 'blog', label: 'Manage Blog', icon: Newspaper },
+        { id: 'subscribers', label: 'Newsletter Subscribers', icon: Mail },
     ];
 
     if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
@@ -735,6 +783,62 @@ const Admin = () => {
                             <textarea name="description" placeholder="Description" required className="w-full p-2 border rounded-lg" rows="3" value={newEvent.description} onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}></textarea>
                             <input name="image" placeholder="Image URL (Optional)" className="w-full p-2 border rounded-lg" value={newEvent.image} onChange={e => setNewEvent({ ...newEvent, image: e.target.value })} />
                             <Button type="submit" className="w-full justify-center">Create Event</Button>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {showPostForm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold">Add New Blog Post</h3>
+                            <button onClick={() => setShowPostForm(false)}><X size={24} /></button>
+                        </div>
+                        <form onSubmit={handleAddPost} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input required placeholder="Title" className="p-2 border rounded-lg md:col-span-2" value={newPost.title} onChange={e => setNewPost({ ...newPost, title: e.target.value })} />
+                            <input required placeholder="Author" className="p-2 border rounded-lg" value={newPost.author} onChange={e => setNewPost({ ...newPost, author: e.target.value })} />
+                            <select className="p-2 border rounded-lg" value={newPost.category} onChange={e => setNewPost({ ...newPost, category: e.target.value })}>
+                                <option>General</option>
+                                <option>Education</option>
+                                <option>Environment</option>
+                                <option>Mentorship</option>
+                                <option>Community</option>
+                            </select>
+                            <input placeholder="Image URL" className="p-2 border rounded-lg md:col-span-2" value={newPost.image} onChange={e => setNewPost({ ...newPost, image: e.target.value })} />
+                            <textarea required placeholder="Excerpt (Short summary)" className="p-2 border rounded-lg md:col-span-2" rows="2" value={newPost.excerpt} onChange={e => setNewPost({ ...newPost, excerpt: e.target.value })} />
+                            <textarea required placeholder="Content" className="p-2 border rounded-lg md:col-span-2" rows="6" value={newPost.content} onChange={e => setNewPost({ ...newPost, content: e.target.value })} />
+                            <div className="md:col-span-2">
+                                <Button type="submit" className="w-full justify-center">Publish Post</Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {showPostForm && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center mb-6">
+                            <h3 className="text-xl font-bold">Add New Blog Post</h3>
+                            <button onClick={() => setShowPostForm(false)}><X size={24} /></button>
+                        </div>
+                        <form onSubmit={handleAddPost} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input required placeholder="Title" className="p-2 border rounded-lg md:col-span-2" value={newPost.title} onChange={e => setNewPost({ ...newPost, title: e.target.value })} />
+                            <input required placeholder="Author" className="p-2 border rounded-lg" value={newPost.author} onChange={e => setNewPost({ ...newPost, author: e.target.value })} />
+                            <select className="p-2 border rounded-lg" value={newPost.category} onChange={e => setNewPost({ ...newPost, category: e.target.value })}>
+                                <option>General</option>
+                                <option>Education</option>
+                                <option>Environment</option>
+                                <option>Mentorship</option>
+                                <option>Community</option>
+                            </select>
+                            <input placeholder="Image URL" className="p-2 border rounded-lg md:col-span-2" value={newPost.image} onChange={e => setNewPost({ ...newPost, image: e.target.value })} />
+                            <textarea required placeholder="Excerpt (Short summary)" className="p-2 border rounded-lg md:col-span-2" rows="2" value={newPost.excerpt} onChange={e => setNewPost({ ...newPost, excerpt: e.target.value })} />
+                            <textarea required placeholder="Content" className="p-2 border rounded-lg md:col-span-2" rows="6" value={newPost.content} onChange={e => setNewPost({ ...newPost, content: e.target.value })} />
+                            <div className="md:col-span-2">
+                                <Button type="submit" className="w-full justify-center">Publish Post</Button>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -111,6 +111,19 @@ const initDatabase = async () => {
     createdAt ${isPostgres ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP'}
   `));
 
+  // Create Posts Table (Blog)
+  await db.exec(createTable('posts', `
+    id ${autoIncrement},
+    title ${textType},
+    excerpt ${textType},
+    content ${textType},
+    author ${textType},
+    category ${textType},
+    image ${textType},
+    readTime ${textType},
+    createdAt ${isPostgres ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP'}
+  `));
+
   // Seed programs
   const insertProgram = db.prepare('INSERT INTO programs (title, category, description, image, icon) VALUES (?, ?, ?, ?, ?)');
   const checkProgram = db.prepare('SELECT id FROM programs WHERE title = ?');

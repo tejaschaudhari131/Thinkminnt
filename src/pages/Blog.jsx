@@ -5,56 +5,32 @@ import { Link } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
 import SEO from '../components/SEO';
 
-const blogPosts = [
-    {
-        id: 1,
-        title: "Empowering Rural India Through Digital Literacy",
-        excerpt: "How our 'Tech for All' initiative is bridging the digital divide in Maharashtra's remote villages.",
-        author: "Tejas S.",
-        date: "Nov 20, 2024",
-        category: "Education",
-        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        readTime: "5 min read"
-    },
-    {
-        id: 2,
-        title: "Sustainable Living: Small Steps, Big Impact",
-        excerpt: "Practical tips for urban residents to contribute to a greener environment, starting from their own balconies.",
-        author: "Priya M.",
-        date: "Nov 15, 2024",
-        category: "Environment",
-        image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        readTime: "4 min read"
-    },
-    {
-        id: 3,
-        title: "The Power of Mentorship",
-        excerpt: "Why guidance from industry professionals is crucial for the career development of underprivileged youth.",
-        author: "Rahul K.",
-        date: "Nov 10, 2024",
-        category: "Mentorship",
-        image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        readTime: "6 min read"
-    },
-    {
-        id: 4,
-        title: "Highlights from our Diwali Donation Drive",
-        excerpt: "A look back at how we spread joy and warmth to over 500 families this festive season.",
-        author: "Team ThinkMinnt",
-        date: "Nov 12, 2024",
-        category: "Community",
-        image: "https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-        readTime: "3 min read"
-    }
-];
+import API_URL from '../config/api';
 
 const categories = ['All', 'Education', 'Environment', 'Mentorship', 'Community'];
 
 const Blog = () => {
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
 
-    const filteredPosts = blogPosts.filter(post => {
+    React.useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const response = await fetch(`${API_URL}/api/posts`);
+                const data = await response.json();
+                setPosts(data);
+            } catch (error) {
+                console.error('Error fetching posts:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPosts();
+    }, []);
+
+    const filteredPosts = posts.filter(post => {
         const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
         const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
