@@ -300,6 +300,57 @@ const initDatabase = async () => {
       console.log(`Seeded event: ${event.title}`);
     }
   }
+
+  // Seed Posts
+  const insertPost = db.prepare('INSERT INTO posts (title, excerpt, content, author, category, image, readTime) VALUES (?, ?, ?, ?, ?, ?, ?)');
+  const checkPost = db.prepare('SELECT id FROM posts WHERE title = ?');
+
+  const posts = [
+    {
+      title: "Empowering Rural India Through Digital Literacy",
+      excerpt: "How our 'Tech for All' initiative is bridging the digital divide in Maharashtra's remote villages.",
+      content: "In the heart of rural Maharashtra, a quiet revolution is underway. Our 'Tech for All' initiative has reached over 50 villages, providing not just laptops, but the skills to use them. We believe that digital literacy is the key to unlocking economic opportunities in the 21st century...",
+      author: "Tejas S.",
+      category: "Education",
+      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      readTime: "5 min read"
+    },
+    {
+      title: "Sustainable Living: Small Steps, Big Impact",
+      excerpt: "Practical tips for urban residents to contribute to a greener environment, starting from their own balconies.",
+      content: "Urbanization doesn't have to mean the end of nature. In this post, we explore how small changes in our daily lives—from composting kitchen waste to starting a balcony garden—can collectively make a massive difference to our city's environment...",
+      author: "Priya M.",
+      category: "Environment",
+      image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      readTime: "4 min read"
+    },
+    {
+      title: "The Power of Mentorship",
+      excerpt: "Why guidance from industry professionals is crucial for the career development of underprivileged youth.",
+      content: "Talent is everywhere, but opportunity is not. Our mentorship program connects industry veterans with ambitious youth from underserved communities. The results? Increased confidence, clearer career paths, and a network that opens doors...",
+      author: "Rahul K.",
+      category: "Mentorship",
+      image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      readTime: "6 min read"
+    },
+    {
+      title: "Highlights from our Diwali Donation Drive",
+      excerpt: "A look back at how we spread joy and warmth to over 500 families this festive season.",
+      content: "This Diwali was special. Thanks to your generous donations, we were able to distribute sweets, new clothes, and educational kits to over 500 families in Pune. The smiles on the children's faces were the brightest lights of the festival...",
+      author: "Team ThinkMinnt",
+      category: "Community",
+      image: "https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      readTime: "3 min read"
+    }
+  ];
+
+  for (const post of posts) {
+    const existing = await checkPost.get(post.title);
+    if (!existing) {
+      await insertPost.run(post.title, post.excerpt, post.content, post.author, post.category, post.image, post.readTime);
+      console.log(`Seeded post: ${post.title}`);
+    }
+  }
 };
 
 export { initDatabase };
