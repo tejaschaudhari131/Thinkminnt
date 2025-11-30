@@ -721,6 +721,67 @@ const Admin = () => {
                             </div>
                         </div>
                     )}
+
+                    {/* Blog Tab */}
+                    {activeTab === 'blog' && (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-2xl font-bold text-gray-800">Manage Blog</h2>
+                                <Button onClick={() => setShowPostForm(true)} size="sm" className="flex items-center gap-2">
+                                    <Plus size={20} /> Add Post
+                                </Button>
+                            </div>
+                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {posts.map((post) => (
+                                    <div key={post.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col">
+                                        <div className="h-40 mb-4 rounded-lg overflow-hidden">
+                                            <img src={post.image || 'https://via.placeholder.com/300'} alt={post.title} className="w-full h-full object-cover" />
+                                        </div>
+                                        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-1">{post.title}</h3>
+                                        <p className="text-sm text-gray-500 mb-4 line-clamp-2">{post.excerpt}</p>
+                                        <div className="mt-auto flex justify-between items-center">
+                                            <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-600">{post.category}</span>
+                                            <button onClick={() => handleDeletePost(post.id)} className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition-colors">
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Subscribers Tab */}
+                    {activeTab === 'subscribers' && (
+                        <div className="space-y-6">
+                            <div className="flex justify-between items-center">
+                                <h2 className="text-2xl font-bold text-gray-800">Newsletter Subscribers</h2>
+                                <Button onClick={() => handleExport('subscribers')} variant="outline" size="sm" className="flex items-center gap-2">
+                                    <Download size={16} /> Export CSV
+                                </Button>
+                            </div>
+                            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left">
+                                        <thead className="bg-gray-50 border-b border-gray-100">
+                                            <tr>
+                                                <th className="p-4 font-semibold text-gray-600">Email</th>
+                                                <th className="p-4 font-semibold text-gray-600">Subscribed Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-gray-100">
+                                            {subscribers.map((sub) => (
+                                                <tr key={sub.id} className="hover:bg-gray-50">
+                                                    <td className="p-4 font-medium text-gray-900">{sub.email}</td>
+                                                    <td className="p-4 text-sm text-gray-500">{new Date(sub.createdAt).toLocaleDateString()}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </main>
 
@@ -783,34 +844,6 @@ const Admin = () => {
                             <textarea name="description" placeholder="Description" required className="w-full p-2 border rounded-lg" rows="3" value={newEvent.description} onChange={e => setNewEvent({ ...newEvent, description: e.target.value })}></textarea>
                             <input name="image" placeholder="Image URL (Optional)" className="w-full p-2 border rounded-lg" value={newEvent.image} onChange={e => setNewEvent({ ...newEvent, image: e.target.value })} />
                             <Button type="submit" className="w-full justify-center">Create Event</Button>
-                        </form>
-                    </div>
-                </div>
-            )}
-
-            {showPostForm && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6 max-h-[90vh] overflow-y-auto">
-                        <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold">Add New Blog Post</h3>
-                            <button onClick={() => setShowPostForm(false)}><X size={24} /></button>
-                        </div>
-                        <form onSubmit={handleAddPost} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input required placeholder="Title" className="p-2 border rounded-lg md:col-span-2" value={newPost.title} onChange={e => setNewPost({ ...newPost, title: e.target.value })} />
-                            <input required placeholder="Author" className="p-2 border rounded-lg" value={newPost.author} onChange={e => setNewPost({ ...newPost, author: e.target.value })} />
-                            <select className="p-2 border rounded-lg" value={newPost.category} onChange={e => setNewPost({ ...newPost, category: e.target.value })}>
-                                <option>General</option>
-                                <option>Education</option>
-                                <option>Environment</option>
-                                <option>Mentorship</option>
-                                <option>Community</option>
-                            </select>
-                            <input placeholder="Image URL" className="p-2 border rounded-lg md:col-span-2" value={newPost.image} onChange={e => setNewPost({ ...newPost, image: e.target.value })} />
-                            <textarea required placeholder="Excerpt (Short summary)" className="p-2 border rounded-lg md:col-span-2" rows="2" value={newPost.excerpt} onChange={e => setNewPost({ ...newPost, excerpt: e.target.value })} />
-                            <textarea required placeholder="Content" className="p-2 border rounded-lg md:col-span-2" rows="6" value={newPost.content} onChange={e => setNewPost({ ...newPost, content: e.target.value })} />
-                            <div className="md:col-span-2">
-                                <Button type="submit" className="w-full justify-center">Publish Post</Button>
-                            </div>
                         </form>
                     </div>
                 </div>
