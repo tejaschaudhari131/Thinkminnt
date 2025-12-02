@@ -13,6 +13,11 @@ const Donate = () => {
     const [loadingStory, setLoadingStory] = useState(false);
     const [activeAccordion, setActiveAccordion] = useState(null);
 
+    // User Details State
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const paymentStatus = searchParams.get('status');
@@ -58,20 +63,15 @@ const Donate = () => {
                 return;
             }
 
-            // User details (In a real app, collect these via form)
-            const userDetails = {
-                firstname: 'Guest',
-                email: 'guest@example.com',
-                phone: '9999999999',
-                productinfo: 'Donation'
-            };
+            if (!name || !email || !phone) {
+                alert('Please fill in your details');
+                return;
+            }
 
             // 1. Prepare Transaction Data
             const txnid = 'TXN' + Date.now();
             const productinfo = 'Donation';
-            const firstname = 'Guest';
-            const email = 'guest@example.com';
-            const phone = '9999999999';
+            const firstname = name;
             const surl = `${API_URL}/api/payment/response`;
             const furl = `${API_URL}/api/payment/response`;
 
@@ -380,6 +380,38 @@ const Donate = () => {
                                             </motion.div>
                                         </AnimatePresence>
 
+
+
+                                        {/* User Details Form */}
+                                        <div className="mb-8 space-y-4">
+                                            <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-4">Your Details</h3>
+                                            <div>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Full Name"
+                                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-100 bg-neutral-50 focus:border-primary focus:bg-white outline-none transition-all"
+                                                    value={name}
+                                                    onChange={(e) => setName(e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <input
+                                                    type="email"
+                                                    placeholder="Email Address"
+                                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-100 bg-neutral-50 focus:border-primary focus:bg-white outline-none transition-all"
+                                                    value={email}
+                                                    onChange={(e) => setEmail(e.target.value)}
+                                                />
+                                                <input
+                                                    type="tel"
+                                                    placeholder="Phone Number"
+                                                    className="w-full px-4 py-3 rounded-xl border-2 border-gray-100 bg-neutral-50 focus:border-primary focus:bg-white outline-none transition-all"
+                                                    value={phone}
+                                                    onChange={(e) => setPhone(e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
+
                                         <button
                                             onClick={handleDonate}
                                             className="w-full bg-accent text-secondary-DEFAULT font-bold py-5 rounded-xl hover:bg-yellow-400 transition-all text-xl shadow-lg hover:shadow-xl hover:shadow-yellow-400/20 transform hover:-translate-y-1 flex items-center justify-center gap-3 group"
@@ -504,7 +536,7 @@ const Donate = () => {
 
                         </div>
                     </div>
-                </section>
+                </section >
             </div >
         </PageTransition >
     );
