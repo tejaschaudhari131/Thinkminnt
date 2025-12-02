@@ -84,11 +84,11 @@ export const generateImpactStory = async (amount) => {
 
     try {
         const prompt = `
-        A user wants to donate $${amount} to the ThinkMint Foundation.
+        A user wants to donate ₹${amount} (Indian Rupees) to the ThinkMint Foundation.
         Generate a ONE-sentence impact story describing exactly what this specific amount could achieve based on our programs (Tech for All, Green Roots, Literacy First).
         Be specific (e.g., "buy 5 books", "plant 10 trees", "fund 1 hour of coding class").
         Do not say "Thank you". Just the impact.
-        Example for $50: "Your $50 could provide 5 science textbooks for the Tech for All program."
+        Example for ₹500: "Your ₹500 could provide 5 science textbooks for the Tech for All program."
         `;
 
         const result = await model.generateContent(prompt);
