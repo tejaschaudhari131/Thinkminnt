@@ -22,11 +22,26 @@ const initDatabase = async () => {
 
   await db.exec(createTable('donations', `
     id ${autoIncrement},
+    txnid ${textType} UNIQUE,
     amount REAL,
+    donorName ${textType},
+    donorEmail ${textType},
     frequency ${textType},
     paymentMethod ${textType},
+    status ${textType},
     createdAt ${isPostgres ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP'}
   `));
+
+  // Migration for donations table
+  try {
+    await db.exec(`ALTER TABLE donations ADD COLUMN txnid ${textType} `);
+    await db.exec(`ALTER TABLE donations ADD COLUMN donorName ${textType} `);
+    await db.exec(`ALTER TABLE donations ADD COLUMN donorEmail ${textType} `);
+    await db.exec(`ALTER TABLE donations ADD COLUMN status ${textType} `);
+    console.log('Added missing columns to donations table');
+  } catch (err) {
+    // Ignore if columns already exist
+  }
 
   await db.exec(createTable('programs', `
     id ${autoIncrement},
@@ -42,7 +57,7 @@ const initDatabase = async () => {
     title ${textType},
     department ${textType},
     location ${textType},
-    type ${textType},
+  type ${textType},
     description ${textType},
     requirements ${textType},
     createdAt ${isPostgres ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP'}
@@ -65,7 +80,7 @@ const initDatabase = async () => {
 
   // Migration to add columns if they don't exist (for existing production DB)
   try {
-    await db.exec(`ALTER TABLE applications ADD COLUMN resumeData ${isPostgres ? 'BYTEA' : 'BLOB'}`);
+    await db.exec(`ALTER TABLE applications ADD COLUMN resumeData ${isPostgres ? 'BYTEA' : 'BLOB'} `);
     console.log('Added resumeData column to applications table');
   } catch (err) {
     // Ignore if column already exists
@@ -75,7 +90,7 @@ const initDatabase = async () => {
   }
 
   try {
-    await db.exec(`ALTER TABLE applications ADD COLUMN resumeType ${textType}`);
+    await db.exec(`ALTER TABLE applications ADD COLUMN resumeType ${textType} `);
     console.log('Added resumeType column to applications table');
   } catch (err) {
     // Ignore if column already exists
@@ -99,7 +114,7 @@ const initDatabase = async () => {
     description ${textType},
     image ${textType},
     status ${textType} DEFAULT 'Upcoming'
-  `));
+    `));
 
   // Create Event Registrations Table
   await db.exec(createTable('event_registrations', `
@@ -163,7 +178,7 @@ const initDatabase = async () => {
     const existing = await checkProgram.get(program.title);
     if (!existing) {
       await insertProgram.run(program.title, program.category, program.description, program.image, program.icon);
-      console.log(`Seeded program: ${program.title}`);
+      console.log(`Seeded program: ${program.title} `);
     }
   }
 
@@ -266,7 +281,7 @@ const initDatabase = async () => {
     const existing = await checkCareer.get(career.title);
     if (!existing) {
       await insertCareer.run(career.title, career.department, career.location, career.type, career.description, career.requirements);
-      console.log(`Seeded career: ${career.title}`);
+      console.log(`Seeded career: ${career.title} `);
     }
   }
 
@@ -297,7 +312,7 @@ const initDatabase = async () => {
     const existing = await checkEvent.get(event.title);
     if (!existing) {
       await insertEvent.run(event.title, event.date, event.location, event.description, event.image, event.status);
-      console.log(`Seeded event: ${event.title}`);
+      console.log(`Seeded event: ${event.title} `);
     }
   }
 
@@ -348,7 +363,7 @@ const initDatabase = async () => {
     const existing = await checkPost.get(post.title);
     if (!existing) {
       await insertPost.run(post.title, post.excerpt, post.content, post.author, post.category, post.image, post.readTime);
-      console.log(`Seeded post: ${post.title}`);
+      console.log(`Seeded post: ${post.title} `);
     }
   }
 };

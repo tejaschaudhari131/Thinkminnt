@@ -31,32 +31,51 @@ const allowedOrigins = [
     'https://tejaschaudhari131.github.io', // Allow GitHub Pages
     'https://thinkminnt-api.onrender.com', // Render Default URL
     'https://api.thinkminnt.com', // Custom Domain for API
+    'https://test.payu.in', // PayU Test Environment
+    'https://secure.payu.in', // PayU Production Environment
+    'https://payu.in',
     process.env.FRONTEND_URL // Allow custom frontend URL from environment variable
 ].filter(Boolean);
 
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
+        console.log('Incoming Request Origin:', origin); // Debug log
+
+        // Allow requests with no origin (like mobile apps, curl, or server-to-server)
+        if (!origin || origin === 'null') return callback(null, true);
 
         // Check if origin is in allowed list or matches Vercel pattern
-        if (allowedOrigins.some(allowed => {
+        const isAllowed = allowedOrigins.some(allowed => {
             if (allowed.includes('*')) {
                 const pattern = allowed.replace('*', '.*');
                 return new RegExp(pattern).test(origin);
             }
             return allowed === origin;
-        })) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
+        });
+
+        if (isAllowed) {
+            return callback(null, true);
         }
+
+        // Allow any PayU domain (broad check)
+        if (origin.includes('payu.in') || origin.includes('payu')) {
+            console.log('Allowed PayU Origin:', origin);
+            return callback(null, true);
+        }
+
+        console.log('BLOCKED ORIGIN:', origin);
+        callback(new Error('Not allowed by CORS'));
     },
     credentials: true
 }));
+
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/uploads', express.static(uploadDir));
+
+import paymentRoutes from './routes/payment.js';
 app.use('/api', routes);
+app.use('/api/payment', paymentRoutes);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));
