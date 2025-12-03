@@ -4,6 +4,8 @@ import Button from '../components/Button';
 import { UserPlus, Mail, Lock, User } from 'lucide-react';
 import API_URL from '../config/api';
 
+import SEO from '../components/SEO';
+
 const Register = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -48,6 +50,7 @@ const Register = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-20">
+            <SEO title="Register | ThinkMinnt Foundation" />
             <div className="max-w-md w-full bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
                 <div className="text-center mb-8">
                     <div className="w-16 h-16 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-secondary">

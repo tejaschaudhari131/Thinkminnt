@@ -237,9 +237,9 @@ const Donate = () => {
     return (
         <PageTransition>
             <SEO
-                title="Donate - Join Our Family"
-                description="Your contribution directly impacts lives. Join us in creating a sustainable future for communities in need."
-                keywords="Donate, Charity, NGO, Support, Give Back, Philanthropy"
+                title="Donate - Support Education | ThinkMinnt Foundation"
+                description="Your contribution to ThinkMinnt Foundation directly impacts lives. Join us in creating a sustainable future for communities in need in Pune and beyond."
+                keywords="Donate, ThinkMinnt, Think Mint, Think Minnd, Charity, NGO, Support, Give Back, Philanthropy, Education Donation, Tax Deductible 80G"
             />
             <div className="flex flex-col min-h-screen bg-neutral-50 font-sans">
                 {/* Hero Section */}

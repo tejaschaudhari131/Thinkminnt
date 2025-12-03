@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, MapPin, Users, CheckCircle } from 'lucide-react';
 import Button from '../components/Button';
 import PageTransition from '../components/PageTransition';
+import SEO from '../components/SEO';
 
 const ProgramDetails = () => {
     const { id } = useParams();
@@ -37,6 +38,12 @@ const ProgramDetails = () => {
 
     return (
         <PageTransition>
+            <SEO
+                title={`${programData.title} | ThinkMinnt Foundation`}
+                description={programData.description}
+                keywords={`${programData.category}, Program, Education, Social Impact, ThinkMinnt, Think Mint, Think Minnd, ${programData.title}`}
+                image={programData.image}
+            />
             <div className="flex flex-col">
                 {/* Hero Section */}
                 <section className="relative h-[60vh] min-h-[500px] flex items-end pb-20 overflow-hidden">

@@ -69,9 +69,37 @@ app.use(cors({
     credentials: true
 }));
 
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+
+// ... (existing imports)
+
+// Security Headers
+app.use(helmet({
+    contentSecurityPolicy: false, // Disable CSP for now to avoid breaking scripts/images
+    crossOriginEmbedderPolicy: false
+}));
+
+// Compression
+app.use(compression());
+
+// Rate Limiting
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: 'Too many requests from this IP, please try again after 15 minutes'
+});
+app.use('/api', limiter); // Apply to API routes only
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/uploads', express.static(uploadDir));
+app.use('/uploads', express.static(uploadDir, {
+    maxAge: '1d', // Cache static files for 1 day
+    immutable: true
+}));
 
 import paymentRoutes from './routes/payment.js';
 app.use('/api', routes);

@@ -32,9 +32,9 @@ const Partners = () => {
     return (
         <PageTransition>
             <SEO
-                title="Partner With Us"
-                description="Collaborate with ThinkMinnt Foundation through CSR initiatives, school alliances, and strategic partnerships."
-                keywords="CSR, Corporate Partnership, School Alliance, NGO Partnership, Pune"
+                title="Partner With Us | ThinkMinnt Foundation"
+                description="Collaborate with ThinkMinnt Foundation through CSR initiatives, school alliances, and strategic partnerships. Join us in Pune to drive social impact."
+                keywords="CSR, Corporate Partnership, School Alliance, NGO Partnership, Pune, ThinkMinnt, Think Mint, Think Minnd, Social Impact, Corporate Social Responsibility"
             />
             <div className="flex flex-col">
                 {/* Hero Section */}

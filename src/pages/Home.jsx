@@ -54,9 +54,9 @@ const Home = () => {
     return (
         <PageTransition>
             <SEO
-                title="Home"
-                description="ThinkMinnt Foundation is empowering communities through education, innovation, and sustainable development."
-                keywords="ThinkMinnt, Foundation, Education, Innovation, Non-Profit, India, Social Impact"
+                title="Home - Innovating Education for a Better Tomorrow"
+                description="ThinkMinnt Foundation is a Section 8 non-profit bridging the digital divide in India through MINNT Labs, coding bootcamps, and holistic education."
+                keywords="ThinkMinnt, Think Mint, ThinkMinnd, NGO India, Education NGO, Section 8 Company, Digital Literacy, Coding for Kids, Social Impact, Pune NGO, Charity"
                 schema={organizationSchema}
             />
             <div className="flex flex-col overflow-hidden">
@@ -267,8 +267,8 @@ const Home = () => {
                         </motion.div>
                     </div>
                 </section>
-            </div>
-        </PageTransition>
+            </div >
+        </PageTransition >
     );
 };
 

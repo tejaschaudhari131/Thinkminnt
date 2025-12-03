@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { motion } from 'framer-motion';
 import { Code, Sprout, HeartHandshake, BookOpen, ArrowRight, Sparkles } from 'lucide-react';
 import Button from '../components/Button';
@@ -59,8 +60,6 @@ const Programs = () => {
             .finally(() => setLoading(false));
     }, []);
 
-
-
     const programSchema = {
         "@context": "https://schema.org",
         "@type": "ItemList",
@@ -77,10 +76,6 @@ const Programs = () => {
             "areaServed": {
                 "@type": "Place",
                 "name": "Pune, Maharashtra, India"
-            },
-            "hasOfferCatalog": {
-                "@type": "OfferCatalog",
-                "name": program.category
             }
         }))
     };
@@ -88,9 +83,9 @@ const Programs = () => {
     return (
         <PageTransition>
             <SEO
-                title="Our Programs"
-                description="Discover our initiatives in Digital Literacy, Rural Education, and Skill Development designed to empower communities."
-                keywords="Programs, Education, Digital Literacy, Skill Development, Rural India"
+                title="Our Programs - MINNT Labs & Bootcamps"
+                description="Explore our initiatives: MINNT Labs for hands-on science, Coding Bootcamps for digital skills, and Teacher Training programs."
+                keywords="MINNT Labs, STEM Education, Coding Bootcamps, Teacher Training, Digital Literacy Programs, NGO Projects"
                 schema={programSchema}
             />
             <div className="flex flex-col">

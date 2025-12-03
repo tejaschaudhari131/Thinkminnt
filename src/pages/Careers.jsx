@@ -125,9 +125,9 @@ const Careers = () => {
     return (
         <PageTransition>
             <SEO
-                title="Join Our Team - Careers"
+                title="Join Our Team - Careers | ThinkMinnt Foundation"
                 description="Be a part of the change. Explore career opportunities at ThinkMinnt Foundation and help us build a better future."
-                keywords="Careers, Jobs, NGO Jobs, Social Impact Careers, Volunteer, Pune"
+                keywords="Careers, Jobs, NGO Jobs, Social Impact Careers, Volunteer, Pune, ThinkMinnt, Think Mint, Think Minnd, Hiring, Non-Profit Jobs"
                 schema={jobSchema}
             />
             <div className="flex flex-col">

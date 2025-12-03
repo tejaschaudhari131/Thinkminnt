@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import API_URL from '../config/api';
 
+import SEO from '../components/SEO';
+
 const COLORS = ['#2A9D8F', '#E9C46A', '#E76F51', '#264653', '#1A365D'];
 
 const Admin = () => {
@@ -355,6 +357,7 @@ const Admin = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 pt-20 flex">
+            <SEO title="Admin Dashboard | ThinkMinnt Foundation" />
             {/* Desktop Sidebar */}
             <aside
                 className={`fixed left-0 top-20 h-[calc(100vh-5rem)] bg-white shadow-xl z-40 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-64' : 'w-20'} hidden md:flex flex-col`}

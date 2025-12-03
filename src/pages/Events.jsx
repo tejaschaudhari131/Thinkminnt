@@ -67,9 +67,9 @@ const Events = () => {
     return (
         <PageTransition>
             <SEO
-                title="Upcoming Events"
-                description="Join our workshops, plantation drives, and community meetups."
-                keywords="Events, Workshops, Volunteering, Pune, NGO"
+                title="Upcoming Events | ThinkMinnt Foundation"
+                description="Join our workshops, plantation drives, and community meetups. Make a difference with ThinkMinnt Foundation."
+                keywords="Events, Workshops, Volunteering, Pune, NGO, ThinkMinnt, Think Mint, Think Minnd, Community Service, Plantation Drive"
             />
 
             {/* Hero Section */}

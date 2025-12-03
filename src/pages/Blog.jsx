@@ -40,9 +40,9 @@ const Blog = () => {
     return (
         <PageTransition>
             <SEO
-                title="News & Insights"
+                title="News & Insights | ThinkMinnt Foundation"
                 description="Read the latest stories, updates, and insights from ThinkMinnt Foundation. Explore our impact on education, environment, and community."
-                keywords="Blog, News, Stories, Impact, Education, Environment"
+                keywords="Blog, News, Stories, Impact, Education, Environment, ThinkMinnt, Think Mint, Think Minnd, Social Work, NGO Updates"
             />
             <div className="flex flex-col">
                 {/* Hero Section */}

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import API_URL from '../config/api';
 import Button from '../components/Button';
 import jsPDF from 'jspdf';
+import SEO from '../components/SEO';
 
 const DonorDashboard = () => {
     const [activeTab, setActiveTab] = useState('overview');
@@ -101,6 +102,7 @@ const DonorDashboard = () => {
 
     return (
         <div className="min-h-screen bg-gray-50 pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+            <SEO title="Donor Dashboard | ThinkMinnt Foundation" />
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row gap-8">
 

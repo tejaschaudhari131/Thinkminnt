@@ -1,7 +1,9 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useLocation } from 'react-router-dom';
 
 const SEO = ({ title, description, keywords, image, url, schema }) => {
+    const location = useLocation();
     const siteTitle = "ThinkMinnt Foundation";
     const defaultDescription = "ThinkMinnt Foundation is a non-profit organization dedicated to bridging the digital divide, fostering innovation, and providing quality education to underprivileged communities.";
     const defaultKeywords = "NGO, Education, Digital Literacy, Social Impact, Non-Profit, India, ThinkMinnt";
@@ -12,7 +14,10 @@ const SEO = ({ title, description, keywords, image, url, schema }) => {
     const metaDescription = description || defaultDescription;
     const metaKeywords = keywords || defaultKeywords;
     const metaImage = image ? `${siteUrl}${image}` : `${siteUrl}${defaultImage}`;
-    const metaUrl = url ? `${siteUrl}${url}` : siteUrl;
+
+    // Dynamic Canonical URL
+    const currentUrl = `${siteUrl}${location.pathname}`;
+    const metaUrl = url ? `${siteUrl}${url}` : currentUrl;
 
     return (
         <Helmet>
@@ -28,6 +33,7 @@ const SEO = ({ title, description, keywords, image, url, schema }) => {
             <meta property="og:title" content={fullTitle} />
             <meta property="og:description" content={metaDescription} />
             <meta property="og:image" content={metaImage} />
+            <meta property="og:site_name" content={siteTitle} />
 
             {/* Twitter */}
             <meta property="twitter:card" content="summary_large_image" />

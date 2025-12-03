@@ -44,9 +44,9 @@ const About = () => {
     return (
         <PageTransition>
             <SEO
-                title="About Us"
-                description="Learn about ThinkMinnt Foundation's mission, vision, and the team driving our efforts to empower communities through education and innovation."
-                keywords="About ThinkMinnt, NGO Mission, Vision, Team, Leadership, Values"
+                title="About Us - Our Mission & Vision"
+                description="Learn about ThinkMinnt Foundation's mission to empower underprivileged students through technology, innovation, and holistic education."
+                keywords="About ThinkMinnt, NGO Mission, Education Vision, Social Impact Team, Pune Non-Profit"
             />
             <div className="flex flex-col">
                 {/* Hero Section */}

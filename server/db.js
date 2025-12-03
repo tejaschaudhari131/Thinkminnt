@@ -136,6 +136,17 @@ const initDatabase = async () => {
     createdAt ${isPostgres ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP'}
   `));
 
+  // Indexes for High Performance
+  try {
+    await db.exec(`CREATE INDEX IF NOT EXISTS idx_donations_email ON donations(donorEmail)`);
+    await db.exec(`CREATE INDEX IF NOT EXISTS idx_posts_category ON posts(category)`);
+    await db.exec(`CREATE INDEX IF NOT EXISTS idx_events_status ON events(status)`);
+    await db.exec(`CREATE INDEX IF NOT EXISTS idx_applications_jobId ON applications(jobId)`);
+    console.log('Database indexes verified');
+  } catch (err) {
+    console.error('Error creating indexes:', err);
+  }
+
   // Seed programs
   const insertProgram = db.prepare('INSERT INTO programs (title, category, description, image, icon) VALUES (?, ?, ?, ?, ?)');
   const checkProgram = db.prepare('SELECT id FROM programs WHERE title = ?');

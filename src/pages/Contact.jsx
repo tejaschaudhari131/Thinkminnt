@@ -63,9 +63,9 @@ const Contact = () => {
     return (
         <PageTransition>
             <SEO
-                title="Contact Us - ThinkMinnt Foundation"
-                description="Get in touch with ThinkMinnt Foundation. We'd love to hear from you about volunteering, donations, or partnerships."
-                keywords="Contact, Address, Email, Phone, Volunteer, Donate, Pune NGO"
+                title="Contact Us | ThinkMinnt Foundation"
+                description="Get in touch with ThinkMinnt Foundation in Pune. We'd love to hear from you about volunteering, donations, or partnerships. Call or email us today."
+                keywords="Contact, ThinkMinnt, Think Mint, Think Minnd, Address, Email, Phone, Volunteer, Donate, Pune NGO, Non-Profit Contact"
                 schema={contactSchema}
             />
             <div className="flex flex-col">

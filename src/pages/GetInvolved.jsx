@@ -63,9 +63,9 @@ const GetInvolved = () => {
     return (
         <PageTransition>
             <SEO
-                title="Get Involved - Volunteer"
-                description="Join our mission. Volunteer your time and skills to help underprivileged children."
-                keywords="Volunteer, NGO, Social Work, Education, Pune, Get Involved"
+                title="Get Involved - Volunteer | ThinkMinnt Foundation"
+                description="Join our mission at ThinkMinnt Foundation. Volunteer your time and skills to help underprivileged children in Pune. Be a changemaker today."
+                keywords="Volunteer, ThinkMinnt, Think Mint, Think Minnd, NGO, Social Work, Education, Pune, Get Involved, Student Chapter, Community Service"
                 schema={volunteerSchema}
             />
             <div className="flex flex-col">
