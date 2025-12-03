@@ -10,37 +10,37 @@ const Gallery = () => {
     const photos = [
         {
             id: 1,
-            src: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             caption: "Tech for All Workshop",
             category: "Education"
         },
         {
             id: 2,
-            src: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            src: "https://images.unsplash.com/photo-1593113598332-cd288d649433?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             caption: "Community Clean-up Drive",
             category: "Environment"
         },
         {
             id: 3,
-            src: "https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             caption: "Student Mentorship Session",
             category: "Mentorship"
         },
         {
             id: 4,
-            src: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            src: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             caption: "Women Empowerment Seminar",
             category: "Community"
         },
         {
             id: 5,
-            src: "https://images.unsplash.com/photo-1593113598332-cd288d649433?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            src: "https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             caption: "Tree Plantation Day",
             category: "Environment"
         },
         {
             id: 6,
-            src: "https://images.unsplash.com/photo-1577896851231-70ef18881754?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+            src: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
             caption: "Digital Literacy Class",
             category: "Education"
         }
@@ -52,14 +52,14 @@ const Gallery = () => {
             name: "Riya Sharma",
             role: "Student, Tech for All",
             quote: "I just started the computer course last week, and I'm already learning so much! I'm excited to see what I can build by the end of the program.",
-            image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
+            image: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
         },
         {
             id: 2,
             name: "Arjun Patel",
             role: "Founding Volunteer",
             quote: "Being part of ThinkMinnt from day one has been incredible. The energy in our first few drives shows just how much potential we have to make a real difference.",
-            image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
+            image: "https://images.unsplash.com/photo-1618588507085-c79565432917?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80"
         }
     ];
 

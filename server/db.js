@@ -14,21 +14,18 @@ const initDatabase = async () => {
     id ${autoIncrement},
     firstName ${textType},
     lastName ${textType},
-    email ${textType},
-    subject ${textType},
-    message ${textType},
-    createdAt ${isPostgres ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP'}
-  `));
-
-  await db.exec(createTable('donations', `
-    id ${autoIncrement},
-    txnid ${textType} UNIQUE,
-    amount REAL,
-    donorName ${textType},
-    donorEmail ${textType},
     frequency ${textType},
     paymentMethod ${textType},
     status ${textType},
+    createdAt ${isPostgres ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP'}
+  `));
+
+  await db.exec(createTable('users', `
+    id ${autoIncrement},
+    name ${textType},
+    email ${textType} UNIQUE,
+    password ${textType},
+    role ${textType} DEFAULT 'donor',
     createdAt ${isPostgres ? 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP' : 'DATETIME DEFAULT CURRENT_TIMESTAMP'}
   `));
 
@@ -148,28 +145,28 @@ const initDatabase = async () => {
       title: "Tech for All",
       category: "Education",
       description: "Bridging the digital divide by providing laptops, tablets, and comprehensive coding workshops to under-resourced schools. We empower students with the digital literacy skills required for the 21st-century workforce, ensuring no child is left behind in the tech revolution.",
-      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       icon: "Code"
     },
     {
       title: "Green Roots",
       category: "Environment",
       description: "A community-driven initiative focused on urban reforestation and sustainable gardening. We transform neglected urban spaces into vibrant green hubs that improve air quality, provide fresh organic produce to local food banks, and serve as educational centers for environmental stewardship.",
-      image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       icon: "Sprout"
     },
     {
       title: "Future Leaders",
       category: "Mentorship",
       description: "Connecting ambitious youth with industry professionals for 1-on-1 mentorship, career guidance, and leadership development. Our program focuses on soft skills, networking, and confidence building to prepare the next generation of ethical and innovative leaders.",
-      image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       icon: "HeartHandshake"
     },
     {
       title: "Literacy First",
       category: "Education",
       description: "Establishing community libraries and after-school reading programs to foster a love for learning in early childhood. We provide access to diverse books and educational resources, believing that literacy is the fundamental building block for all future academic and personal success.",
-      image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       icon: "BookOpen"
     }
   ];
@@ -295,7 +292,7 @@ const initDatabase = async () => {
       date: "2025-12-15",
       location: "Pune Community Center",
       description: "A hands-on coding workshop for students from underprivileged backgrounds. Volunteers needed to mentor students.",
-      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       status: "Upcoming"
     },
     {
@@ -303,7 +300,7 @@ const initDatabase = async () => {
       date: "2025-12-20",
       location: "Riverside Park, Pune",
       description: "Join us to plant 500 saplings and make our city greener. Tools and refreshments provided.",
-      image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       status: "Upcoming"
     }
   ];
@@ -327,7 +324,7 @@ const initDatabase = async () => {
       content: "In the heart of rural Maharashtra, a quiet revolution is underway. Our 'Tech for All' initiative has reached over 50 villages, providing not just laptops, but the skills to use them. We believe that digital literacy is the key to unlocking economic opportunities in the 21st century...",
       author: "Tejas S.",
       category: "Education",
-      image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       readTime: "5 min read"
     },
     {
@@ -336,7 +333,7 @@ const initDatabase = async () => {
       content: "Urbanization doesn't have to mean the end of nature. In this post, we explore how small changes in our daily lives—from composting kitchen waste to starting a balcony garden—can collectively make a massive difference to our city's environment...",
       author: "Priya M.",
       category: "Environment",
-      image: "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1593113598332-cd288d649433?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       readTime: "4 min read"
     },
     {
@@ -345,7 +342,7 @@ const initDatabase = async () => {
       content: "Talent is everywhere, but opportunity is not. Our mentorship program connects industry veterans with ambitious youth from underserved communities. The results? Increased confidence, clearer career paths, and a network that opens doors...",
       author: "Rahul K.",
       category: "Mentorship",
-      image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       readTime: "6 min read"
     },
     {
@@ -354,7 +351,7 @@ const initDatabase = async () => {
       content: "This Diwali was special. Thanks to your generous donations, we were able to distribute sweets, new clothes, and educational kits to over 500 families in Pune. The smiles on the children's faces were the brightest lights of the festival...",
       author: "Team ThinkMinnt",
       category: "Community",
-      image: "https://images.unsplash.com/photo-1485217988980-11786ced9454?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      image: "https://images.unsplash.com/photo-1574169208507-84376144848b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
       readTime: "3 min read"
     }
   ];

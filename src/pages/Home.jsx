@@ -65,8 +65,8 @@ const Home = () => {
                     {/* Background Image & Overlay */}
                     <motion.div style={{ y }} className="absolute inset-0 z-0">
                         <img
-                            src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-                            alt="Children learning"
+                            src="https://images.unsplash.com/photo-1509062522246-3755977927d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
+                            alt="Indian children learning"
                             className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/80 to-primary/40 mix-blend-multiply"></div>
@@ -125,7 +125,7 @@ const Home = () => {
                                 className="relative mt-8 lg:mt-0"
                             >
                                 <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl border-4 md:border-8 border-white/10 backdrop-blur-sm transform hover:rotate-0 transition-transform duration-700">
-                                    <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Community Impact" className="w-full h-auto scale-105 hover:scale-100 transition-transform duration-700" />
+                                    <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Community Impact" className="w-full h-auto scale-105 hover:scale-100 transition-transform duration-700" />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                                     <div className="absolute bottom-4 left-4 md:bottom-8 md:left-8 text-white">
                                         <p className="font-heading font-bold text-lg md:text-2xl">Empowering Youth</p>

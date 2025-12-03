@@ -88,7 +88,7 @@ const About = () => {
                             >
                                 <div className="absolute inset-0 bg-gradient-to-br from-primary to-secondary rounded-[2rem] transform rotate-3 translate-x-4 translate-y-4 opacity-20"></div>
                                 <img
-                                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                    src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                                     alt="Our Team Collaborating"
                                     className="relative rounded-[2rem] shadow-2xl z-10 w-full"
                                 />

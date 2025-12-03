@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Check, CreditCard, Gift, Sparkles, ArrowRight, ShieldCheck, Quote, ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { Heart, Check, CreditCard, Gift, Sparkles, ArrowRight, ShieldCheck, Quote, ChevronDown, ChevronUp, Users, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
 import SEO from '../components/SEO';
@@ -284,6 +284,36 @@ const Donate = () => {
                                 transition={{ delay: 0.2, duration: 0.6 }}
                                 className="lg:col-span-7"
                             >
+                                {/* Featured Campaign: Adopt a Student */}
+                                <motion.div
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className={`bg-gradient-to-r from-secondary to-accent rounded-3xl p-1 shadow-xl mb-8 cursor-pointer transition-all ${amount === 500 && frequency === 'monthly' ? 'ring-4 ring-offset-2 ring-secondary' : ''}`}
+                                    onClick={() => {
+                                        setAmount(500);
+                                        setFrequency('monthly');
+                                    }}
+                                >
+                                    <div className="bg-white rounded-[1.3rem] p-6 flex flex-col sm:flex-row items-center gap-6 h-full relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-32 h-32 bg-secondary/10 rounded-full blur-2xl -mr-16 -mt-16"></div>
+
+                                        <div className="w-20 h-20 bg-secondary/10 rounded-full flex items-center justify-center flex-shrink-0 relative z-10">
+                                            <GraduationCap size={40} className="text-secondary" />
+                                        </div>
+                                        <div className="flex-1 text-center sm:text-left relative z-10">
+                                            <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
+                                                <span className="bg-accent text-secondary-DEFAULT text-xs font-bold px-2 py-1 rounded-full uppercase tracking-wide flex items-center gap-1">
+                                                    <Sparkles size={12} /> Featured Campaign
+                                                </span>
+                                            </div>
+                                            <h3 className="text-2xl font-bold text-gray-900 font-heading">Adopt a Student</h3>
+                                            <p className="text-gray-600 mt-1">Sponsor a child's digital education for just <span className="font-bold text-secondary">₹500/month</span>.</p>
+                                        </div>
+                                        <div className={`p-3 rounded-full transition-colors relative z-10 ${amount === 500 && frequency === 'monthly' ? 'bg-secondary text-white' : 'bg-gray-100 text-gray-400'}`}>
+                                            {amount === 500 && frequency === 'monthly' ? <Check size={24} /> : <ArrowRight size={24} />}
+                                        </div>
+                                    </div>
+                                </motion.div>
                                 <div className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-neutral-100 relative">
                                     {/* Decorative background blob */}
                                     <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-3xl -mr-32 -mt-32"></div>

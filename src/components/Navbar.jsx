@@ -34,6 +34,7 @@ const Navbar = () => {
         { name: 'Team', path: '/team' },
         { name: 'Impact', path: '/impact' },
         { name: 'Careers', path: '/careers' },
+        { name: 'Partners', path: '/partners' },
         { name: 'Contact', path: '/contact' },
     ];
 
@@ -52,35 +53,49 @@ const Navbar = () => {
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center space-x-8">
-                        {navLinks.map((link) => (
+                    <div className="hidden md:flex items-center gap-6">
+                        <div className="flex items-center gap-5">
+                            {navLinks.map((link) => (
+                                <Link
+                                    key={link.name}
+                                    to={link.path}
+                                    className={`text-sm font-medium transition-colors relative group ${location.pathname === link.path
+                                        ? 'text-secondary'
+                                        : scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-white' : 'text-gray-200 hover:text-white'
+                                        }`}
+                                >
+                                    {link.name}
+                                    <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full ${location.pathname === link.path ? 'w-full' : ''}`}></span>
+                                </Link>
+                            ))}
+                        </div>
+
+                        <div className="flex items-center gap-3 pl-4 border-l border-gray-200 dark:border-gray-700">
+                            <button
+                                onClick={toggleTheme}
+                                className={`p-2 rounded-full transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800' : 'text-white hover:bg-white/10'}`}
+                                aria-label="Toggle Dark Mode"
+                            >
+                                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                            </button>
                             <Link
-                                key={link.name}
-                                to={link.path}
-                                className={`text-sm font-medium transition-colors relative group ${location.pathname === link.path
-                                    ? 'text-secondary'
-                                    : scrolled ? 'text-gray-600 dark:text-gray-300 hover:text-primary dark:hover:text-white' : 'text-gray-200 hover:text-white'
+                                to="/login"
+                                className={`text-sm font-medium px-3 py-2 rounded-lg transition-colors ${scrolled
+                                    ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                                    : 'text-white hover:bg-white/10'
                                     }`}
                             >
-                                {link.name}
-                                <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-secondary transition-all duration-300 group-hover:w-full ${location.pathname === link.path ? 'w-full' : ''}`}></span>
+                                Login
                             </Link>
-                        ))}
-                        <button
-                            onClick={toggleTheme}
-                            className={`p-2 rounded-full transition-colors ${scrolled ? 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800' : 'text-white hover:bg-white/10'}`}
-                            aria-label="Toggle Dark Mode"
-                        >
-                            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-                        </button>
-                        <Button
-                            to="/donate"
-                            variant={scrolled ? 'primary' : 'accent'}
-                            size="sm"
-                            className="shadow-lg shadow-primary/20"
-                        >
-                            Donate Now
-                        </Button>
+                            <Button
+                                to="/donate"
+                                variant={scrolled ? 'primary' : 'accent'}
+                                size="sm"
+                                className="shadow-lg shadow-primary/20"
+                            >
+                                Donate Now
+                            </Button>
+                        </div>
                     </div>
 
                     {/* Mobile Menu Button */}
@@ -132,6 +147,13 @@ const Navbar = () => {
                                 <Button to="/donate" variant="primary" className="w-full justify-center shadow-lg shadow-primary/20">
                                     Donate Now
                                 </Button>
+                                <Link
+                                    to="/login"
+                                    onClick={() => setIsOpen(false)}
+                                    className="block text-center mt-4 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary"
+                                >
+                                    Donor Login
+                                </Link>
                             </div>
                         </div>
                     </motion.div>

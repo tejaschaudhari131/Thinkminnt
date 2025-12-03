@@ -193,7 +193,7 @@ const Programs = () => {
                                     className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white/20"
                                 >
                                     <img
-                                        src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                                        src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                                         alt="Brainstorming"
                                         className="w-full h-80 object-cover"
                                     />

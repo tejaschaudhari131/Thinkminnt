@@ -113,7 +113,7 @@ const Events = () => {
                                 >
                                     <div className="h-48 overflow-hidden relative">
                                         <img
-                                            src={event.image || 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
+                                            src={event.image || 'https://images.unsplash.com/photo-1504194921103-f8b80cadd5e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}
                                             alt={event.title}
                                             className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                                         />

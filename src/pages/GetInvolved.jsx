@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Users, BookOpen, Send, CheckCircle } from 'lucide-react';
+import { Heart, Users, BookOpen, Send, CheckCircle, GraduationCap } from 'lucide-react';
 import Button from '../components/Button';
 import PageTransition from '../components/PageTransition';
 import SEO from '../components/SEO';
@@ -133,6 +133,21 @@ const GetInvolved = () => {
                                             </div>
                                         ))}
                                     </div>
+                                </div>
+
+                                <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <div className="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center text-accent-dark">
+                                            <GraduationCap size={24} />
+                                        </div>
+                                        <h3 className="font-bold text-gray-900 text-xl">Start a Student Chapter</h3>
+                                    </div>
+                                    <p className="text-gray-600 mb-6">
+                                        Are you a university student? Lead the change on your campus by starting a ThinkMinnt Chapter. Organize hackathons, fundraisers, and mentorship drives.
+                                    </p>
+                                    <Button to="/partners" variant="secondary" className="w-full justify-center">
+                                        Learn More
+                                    </Button>
                                 </div>
 
                                 <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">

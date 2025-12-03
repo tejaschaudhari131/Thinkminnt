@@ -29,7 +29,7 @@ const coreTeam = [
         name: "Tejas S.",
         role: "Founder & Executive Director",
         bio: "Passionate about leveraging technology for social good. Leads the overall strategy and operations.",
-        image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
         social: { linkedin: "#", twitter: "#", email: "tejas@thinkminnt.org" }
     },
     {
@@ -37,7 +37,7 @@ const coreTeam = [
         name: "Priya Sharma",
         role: "Program Director",
         bio: "Oversees the implementation of all our on-ground initiatives, ensuring they reach the intended beneficiaries.",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
         social: { linkedin: "#", twitter: "#" }
     },
     {
@@ -45,7 +45,7 @@ const coreTeam = [
         name: "Rahul Verma",
         role: "Head of Partnerships",
         bio: "Builds strategic alliances with corporates and other NGOs to amplify our impact.",
-        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
         social: { linkedin: "#", twitter: "#" }
     },
     {
@@ -53,7 +53,7 @@ const coreTeam = [
         name: "Neha Gupta",
         role: "Volunteer Coordinator",
         bio: "Manages our growing community of volunteers, matching their skills with our needs.",
-        image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
         social: { linkedin: "#", twitter: "#" }
     }
 ];

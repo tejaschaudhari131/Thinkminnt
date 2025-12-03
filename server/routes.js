@@ -62,7 +62,13 @@ router.get('/programs', async (req, res) => {
 });
 
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 const SECRET_KEY = 'ThinkMinntSecretKey2024';
+
+// Helper for hashing
+const hashPassword = (password) => {
+    return crypto.createHash('sha256').update(password).digest('hex');
+};
 
 // Middleware to authenticate token
 const authenticateToken = (req, res, next) => {
@@ -78,15 +84,110 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
-router.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    // Hardcoded credentials for simplicity as per plan
+router.post('/register', async (req, res) => {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+        return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+    try {
+        const hashedPassword = hashPassword(password);
+        const stmt = db.prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)');
+        const info = await stmt.run(name, email, hashedPassword);
+
+        // Auto-login
+        const user = { id: info.lastInsertRowid, name, email, role: 'donor' };
+        const accessToken = jwt.sign(user, SECRET_KEY, { expiresIn: '24h' });
+
+        res.json({ success: true, accessToken, user });
+    } catch (error) {
+        if (error.message.includes('UNIQUE constraint failed')) {
+            return res.status(400).json({ success: false, message: 'Email already registered' });
+        }
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.post('/login', async (req, res) => {
+    const { username, password } = req.body; // username is email for donors
+
+    // Admin Backdoor
     if (username === 'admin' && password === 'ThinkMinnt2024!') {
-        const user = { name: username };
+        const user = { name: 'Admin', role: 'admin' };
         const accessToken = jwt.sign(user, SECRET_KEY, { expiresIn: '1h' });
-        res.json({ success: true, accessToken });
-    } else {
-        res.status(401).json({ success: false, message: 'Invalid credentials' });
+        return res.json({ success: true, accessToken, user });
+    }
+
+    try {
+        const hashedPassword = hashPassword(password);
+        const stmt = db.prepare('SELECT * FROM users WHERE email = ? AND password = ?');
+        const user = await stmt.get(username, hashedPassword);
+
+        if (user) {
+            const tokenUser = { id: user.id, name: user.name, email: user.email, role: user.role };
+            const accessToken = jwt.sign(tokenUser, SECRET_KEY, { expiresIn: '24h' });
+            res.json({ success: true, accessToken, user: tokenUser });
+        } else {
+            res.status(401).json({ success: false, message: 'Invalid credentials' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.get('/user/profile', authenticateToken, async (req, res) => {
+    try {
+        const stmt = db.prepare('SELECT id, name, email, role, createdAt FROM users WHERE id = ?');
+        const user = await stmt.get(req.user.id);
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+        res.json({ success: true, user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.put('/user/profile', authenticateToken, async (req, res) => {
+    const { name, email, password } = req.body;
+    try {
+        let stmt;
+        if (password) {
+            const hashedPassword = hashPassword(password);
+            stmt = db.prepare('UPDATE users SET name = ?, email = ?, password = ? WHERE id = ?');
+            await stmt.run(name, email, hashedPassword, req.user.id);
+        } else {
+            stmt = db.prepare('UPDATE users SET name = ?, email = ? WHERE id = ?');
+            await stmt.run(name, email, req.user.id);
+        }
+        res.json({ success: true, message: 'Profile updated' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.get('/donations/my-history', authenticateToken, async (req, res) => {
+    try {
+        // Match by email
+        const stmt = db.prepare('SELECT * FROM donations WHERE donorEmail = ? ORDER BY createdAt DESC');
+        const donations = await stmt.all(req.user.email);
+        res.json({ success: true, donations });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+router.get('/user/impact', authenticateToken, async (req, res) => {
+    try {
+        const stmt = db.prepare('SELECT SUM(amount) as total FROM donations WHERE donorEmail = ?');
+        const result = await stmt.get(req.user.email);
+        const totalDonated = result.total || 0;
+        res.json({ success: true, totalDonated });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: error.message });
     }
 });
 
