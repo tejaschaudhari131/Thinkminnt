@@ -70,7 +70,7 @@ const Donate = () => {
 
             // 1. Prepare Transaction Data
             const txnid = 'TXN' + Date.now();
-            const productinfo = 'Donation';
+            const productinfo = `Donation - ${frequency === 'monthly' ? 'Monthly' : 'One-Time'}`;
             const firstname = name;
             const surl = `${API_URL}/api/payment/response`;
             const furl = `${API_URL}/api/payment/response`;
@@ -352,6 +352,26 @@ const Donate = () => {
                                                 Monthly <span className="text-xs font-normal bg-accent/20 text-accent-dark px-1.5 py-0.5 rounded-full">Impact x12</span>
                                             </button>
                                         </div>
+
+                                        {/* Why Monthly? Helper */}
+                                        <AnimatePresence>
+                                            {frequency === 'monthly' && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, height: 0 }}
+                                                    animate={{ opacity: 1, height: 'auto' }}
+                                                    exit={{ opacity: 0, height: 0 }}
+                                                    className="mb-8 bg-accent/10 border border-accent/20 rounded-xl p-4 flex gap-3"
+                                                >
+                                                    <div className="bg-accent/20 p-2 rounded-full h-fit text-accent-dark">
+                                                        <Sparkles size={16} />
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="font-bold text-gray-900 text-sm">Why Monthly?</h4>
+                                                        <p className="text-xs text-gray-600 mt-1">Reliable monthly support allows us to plan long-term projects and ensure no child drops out mid-year.</p>
+                                                    </div>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
 
                                         {/* Amount Selection */}
                                         <div className="mb-10">

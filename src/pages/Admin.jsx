@@ -17,7 +17,8 @@ import {
     LogOut,
     Menu,
     Newspaper,
-    Mail
+    Mail,
+    Sparkles
 } from 'lucide-react';
 import API_URL from '../config/api';
 
@@ -521,6 +522,24 @@ const Admin = () => {
                                     <Download size={16} /> Export CSV
                                 </Button>
                             </div>
+
+                            {/* Donation Stats Cards */}
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                                    <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider mb-2">Total Raised</h3>
+                                    <p className="text-3xl font-bold text-gray-900">₹{donations.reduce((acc, curr) => acc + Number(curr.amount), 0).toLocaleString()}</p>
+                                </div>
+                                <div className="bg-white p-6 rounded-xl shadow-sm border border-green-100 bg-green-50/50">
+                                    <h3 className="text-green-600 text-sm font-bold uppercase tracking-wider mb-2 flex items-center gap-2">
+                                        <Sparkles size={14} /> Monthly Recurring Revenue (MRR)
+                                    </h3>
+                                    <p className="text-3xl font-bold text-green-700">₹{donations.filter(d => d.frequency === 'Monthly').reduce((acc, curr) => acc + Number(curr.amount), 0).toLocaleString()}</p>
+                                </div>
+                                <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                                    <h3 className="text-gray-500 text-sm font-medium uppercase tracking-wider mb-2">Total Donors</h3>
+                                    <p className="text-3xl font-bold text-gray-900">{donations.length}</p>
+                                </div>
+                            </div>
                             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                                 <div className="overflow-x-auto">
                                     <table className="w-full text-left">
@@ -535,8 +554,12 @@ const Admin = () => {
                                         <tbody className="divide-y divide-gray-100">
                                             {donations.map((d) => (
                                                 <tr key={d.id} className="hover:bg-gray-50">
-                                                    <td className="p-4 font-bold text-green-600">${d.amount}</td>
-                                                    <td className="p-4 capitalize">{d.frequency}</td>
+                                                    <td className="p-4 font-bold text-green-600">₹{d.amount}</td>
+                                                    <td className="p-4">
+                                                        <span className={`px-2 py-1 rounded-full text-xs font-bold ${d.frequency === 'Monthly' ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-gray-100 text-gray-600'}`}>
+                                                            {d.frequency || 'One-Time'}
+                                                        </span>
+                                                    </td>
                                                     <td className="p-4">{d.paymentMethod}</td>
                                                     <td className="p-4 text-sm text-gray-500">{new Date(d.createdAt).toLocaleDateString()}</td>
                                                 </tr>

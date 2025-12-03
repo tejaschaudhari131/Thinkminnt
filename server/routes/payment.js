@@ -63,11 +63,12 @@ router.post('/response', async (req, res) => {
         if (status === 'success') {
             try {
                 // Record donation in database
-                // Note: Frequency is defaulted to 'One-Time' as it's not currently passed in productinfo. 
-                // In a future update, productinfo should include the frequency.
+                // Parse frequency from productinfo (e.g., "Donation - Monthly")
+                const frequency = productinfo.includes('Monthly') ? 'Monthly' : 'One-Time';
+
                 const insertDonation = db.prepare('INSERT INTO donations (txnid, amount, donorName, donorEmail, frequency, paymentMethod, status) VALUES (?, ?, ?, ?, ?, ?, ?)');
-                await insertDonation.run(txnid, amount, firstname, email, 'One-Time', 'PayU', 'success');
-                console.log(`Donation recorded: ${txnid} by ${firstname}`);
+                await insertDonation.run(txnid, amount, firstname, email, frequency, 'PayU', 'success');
+                console.log(`Donation recorded: ${txnid} by ${firstname} (${frequency})`);
             } catch (dbError) {
                 console.error('Database Error recording donation:', dbError);
                 // We still redirect to success because the payment was successful
